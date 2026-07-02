@@ -196,6 +196,12 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
       </div>
       <button type="submit" class="btn btn-primary" style="width:100%">دخول</button>
       <div id="loginError">كلمة المرور غير صحيحة</div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #e3e9f2;text-align:center">
+        <div style="font-size:.78rem;color:#64748b;margin-bottom:8px">
+          أول دخول بعد الترقية؟ اكتب كلمة مرور جديدة (6 أحرف فأكثر) في الخانة أعلاه ثم اضغط:
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm" id="firstTimeBtn">🔑 إنشاء حساب المدير</button>
+      </div>
     </form>
   </div>
 </div>
@@ -326,13 +332,13 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
     <!-- ===== تبويب النشر ===== -->
     <div class="tab-panel" id="tab-publish">
       <div class="note">
-        ⚠️ <b>مهم:</b> تعديلاتك تُحفَظ حالياً في متصفحك أنت فقط (localStorage). لكي يراها كل الزوار،
-        نزّل ملف البيانات من هنا وارفعه إلى موقعك مكان الملف <b dir="ltr">assets/data.js</b>
-        (الخطوات مشروحة في ملف README). عند الترقية إلى قاعدة بيانات Supabase تصبح هذه الخطوة تلقائية.
+        ✅ <b>النشر تلقائي الآن:</b> اللوحة مرتبطة بقاعدة بيانات سحابية (Supabase) —
+        أي تعديل تحفظه يظهر لكل الزوار فوراً دون أي خطوة إضافية.
+        الأزرار أدناه للنسخ الاحتياطي والاستعادة فقط.
       </div>
       <div class="card">
-        <h2>📤 نشر التعديلات</h2>
-        <div class="card-sub">ينزّل ملف <b dir="ltr">data.js</b> يحتوي كل بياناتك الحالية (المنتجات + الأرقام + الشعار)</div>
+        <h2>📤 تصدير ملف البيانات</h2>
+        <div class="card-sub">ينزّل ملف <b dir="ltr">data.js</b> يحتوي كل بياناتك الحالية — كنسخة احتياطية إضافية فقط</div>
         <button class="btn btn-primary" id="exportBtn">⬇️ تنزيل ملف البيانات (data.js)</button>
       </div>
       <div class="card">
@@ -347,9 +353,9 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
         </div>
       </div>
       <div class="card">
-        <h2>♻️ إعادة التعيين</h2>
-        <div class="card-sub">حذف كل التعديلات المحلية والعودة إلى بيانات الملف <b dir="ltr">assets/data.js</b></div>
-        <button class="btn btn-danger" id="resetBtn">حذف التعديلات المحلية</button>
+        <h2>♻️ إعادة التحميل</h2>
+        <div class="card-sub">تجاهل ما على الشاشة وإعادة تحميل آخر نسخة منشورة من قاعدة البيانات</div>
+        <button class="btn btn-danger" id="resetBtn">إعادة التحميل من قاعدة البيانات</button>
       </div>
     </div>
   </main>
@@ -462,39 +468,12 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
 "use strict";
 
 /* =========================================================
-   الحماية بكلمة مرور
+   الحماية: تسجيل دخول حقيقي عبر Supabase Auth
    ---------------------------------------------------------
-   ملاحظة صريحة: هذه حماية على مستوى المتصفح تمنع الوصول العرضي،
-   وليست حماية خادم حقيقية. عند الترقية إلى Supabase استخدم
-   نظام تسجيل الدخول الحقيقي (Supabase Auth).
+   البريد ثابت (حساب المالك) وكلمة المرور تُنشأ من هذه الصفحة
+   أول مرة. قواعد الحماية في قاعدة البيانات (RLS) تمنع أي كتابة
+   من غير هذا الحساب حتى لو حاول أحد التسجيل ببريد آخر.
    ========================================================= */
-const PASS_KEY = "rim_medical_admin_hash";
-const SESSION_KEY = "rim_medical_admin_session";
-/* بصمة كلمة المرور الافتراضية (لا تُخزَّن الكلمة نفسها في الكود) */
-const DEFAULT_HASHES = [
-  "4a19ab483887826a3d6df217d30b66eb8dc74cb717f38ac9f7fe94c1a7fdb224",
-  "djb2-98b349f8"
-];
-
-async function hashText(text) {
-  if (window.crypto && crypto.subtle) {
-    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("rim-salt::" + text));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-  /* بديل بسيط إذا لم تتوفر crypto.subtle (متصفحات قديمة جداً) */
-  let h = 5381;
-  const s = "rim-salt::" + text;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
-  return "djb2-" + h.toString(16);
-}
-
-async function checkPassword(entered) {
-  const enteredHash = await hashText(entered);
-  const custom = localStorage.getItem(PASS_KEY);
-  if (custom) return enteredHash === custom;
-  return DEFAULT_HASHES.includes(enteredHash);
-}
-
 const $ = (s, ctx) => (ctx || document).querySelector(s);
 const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
 
@@ -504,26 +483,47 @@ const adminView = $("#adminView");
 function showAdmin() {
   loginView.style.display = "none";
   adminView.style.display = "block";
-  loadAll();
+  /* ننتظر وصول أحدث نسخة من قاعدة البيانات ثم نعرض */
+  RimStore.ready.then(() => loadAll());
+}
+
+function showLoginError(msg) {
+  const el = $("#loginError");
+  el.textContent = msg || "كلمة المرور غير صحيحة";
+  el.style.display = "block";
 }
 
 $("#loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  if (await checkPassword($("#loginPass").value)) {
-    sessionStorage.setItem(SESSION_KEY, "1");
+  try {
+    await RimStore.signIn($("#loginPass").value);
     showAdmin();
-  } else {
-    $("#loginError").style.display = "block";
+  } catch (err) {
+    showLoginError(err.message);
     $("#loginPass").value = "";
   }
 });
 
+$("#firstTimeBtn").addEventListener("click", async () => {
+  const pass = $("#loginPass").value;
+  if (pass.length < 6) {
+    showLoginError("اكتب كلمة مرور جديدة (6 أحرف فأكثر) في الخانة أعلاه أولاً");
+    return;
+  }
+  try {
+    await RimStore.signUp(pass);
+    showAdmin();
+  } catch (err) {
+    showLoginError(err.message);
+  }
+});
+
 $("#logoutBtn").addEventListener("click", () => {
-  sessionStorage.removeItem(SESSION_KEY);
+  RimStore.signOut();
   location.reload();
 });
 
-if (sessionStorage.getItem(SESSION_KEY) === "1") showAdmin();
+if (RimStore.getSession()) showAdmin();
 
 /* =========================================================
    أدوات عامة
@@ -551,11 +551,11 @@ function toast(msg, type) {
 }
 
 function persist() {
-  if (RimStore.saveData(DATA)) {
-    toast("✅ تم الحفظ في المتصفح — لا تنسَ «النشر» ليراه الزوار", "ok");
-  } else {
-    toast("تعذّر الحفظ — قد تكون مساحة التخزين ممتلئة (صور كبيرة؟)", "err");
-  }
+  RimStore.saveData(DATA);
+  toast("⏳ جارٍ النشر للزوار...", "");
+  RimStore.publish(DATA)
+    .then(() => toast("✅ تم الحفظ والنشر — التغييرات ظاهرة لكل الزوار الآن", "ok"))
+    .catch((err) => toast("⚠️ لم يُنشر: " + err.message, "err"));
 }
 
 /* ضغط الصور إلى حجم معقول قبل الحفظ */
@@ -848,9 +848,13 @@ $("#changePassBtn").addEventListener("click", async () => {
   const p1 = $("#newPass").value, p2 = $("#newPass2").value;
   if (p1.length < 6) { toast("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "err"); return; }
   if (p1 !== p2) { toast("كلمتا المرور غير متطابقتين", "err"); return; }
-  localStorage.setItem(PASS_KEY, await hashText(p1));
-  $("#newPass").value = ""; $("#newPass2").value = "";
-  toast("✅ تم تغيير كلمة المرور", "ok");
+  try {
+    await RimStore.changePassword(p1);
+    $("#newPass").value = ""; $("#newPass2").value = "";
+    toast("✅ تم تغيير كلمة المرور", "ok");
+  } catch (err) {
+    toast("⚠️ " + err.message, "err");
+  }
 });
 
 /* =========================================================
@@ -935,11 +939,9 @@ $("#importInput").addEventListener("change", (e) => {
 });
 
 $("#resetBtn").addEventListener("click", () => {
-  if (!confirm("سيتم حذف كل التعديلات المحلية والعودة لبيانات ملف data.js — متأكد؟")) return;
+  if (!confirm("سيتم تجاهل أي تعديلات غير منشورة وإعادة تحميل النسخة المنشورة من قاعدة البيانات — متأكد؟")) return;
   RimStore.resetData();
-  DATA = RimStore.getData();
-  loadAll();
-  toast("تمت إعادة التعيين", "ok");
+  location.reload();
 });
 
 /* =========================================================

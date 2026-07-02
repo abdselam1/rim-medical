@@ -1409,6 +1409,12 @@ $("#year").textContent = new Date().getFullYear();
 setLang(currentLang);
 observeReveals();
 
+/* عند وصول أحدث نسخة من قاعدة البيانات: إعادة العرض بها */
+RimStore.ready.then(() => {
+  DATA = RimStore.getData();
+  setLang(currentLang);
+});
+
 /* تحديث فوري إذا عُدّلت البيانات من لوحة التحكم في نافذة أخرى */
 window.addEventListener("storage", (e) => {
   if (e.key === RimStore.STORAGE_KEY) {
