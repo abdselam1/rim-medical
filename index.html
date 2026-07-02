@@ -3,765 +3,1407 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة تحكم Rim Medical</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230a2647'/%3E%3Cpath d='M12 5v14M5 12h14' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Rim Medical — معدات ومستلزمات طبية</title>
+<meta name="description" content="Rim Medical — بيع وتوريد المعدات والمستلزمات الطبية للأفراد والمؤسسات. أسرّة طبية، كراسي متحركة، أجهزة قياس، دعامات، ومستلزمات العناية المنزلية.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230fb9b1'/%3E%3Cpath d='M12 5v14M5 12h14' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* =========================================================
+   1) المتغيرات والأساسيات
+   ========================================================= */
 :root{
-  --navy:#0a2647;--navy-2:#123b6d;--teal:#0fb9b1;--teal-dark:#0a8f89;
-  --gold:#c9a24b;--bg:#f2f6fb;--card:#fff;--ink:#13253d;--muted:#5d7290;
-  --line:#e3ebf4;--danger:#d64545;--ok:#1f9d61;
-  --shadow:0 10px 30px rgba(10,38,71,.1);--radius:16px;
+  --navy:#0a2647;
+  --navy-2:#123b6d;
+  --navy-3:#1b4d94;
+  --teal:#0fb9b1;
+  --teal-dark:#0a8f89;
+  --gold:#c9a24b;
+  --gold-light:#e8cf96;
+  --bg:#f4f8fc;
+  --card:#ffffff;
+  --ink:#13253d;
+  --muted:#5d7290;
+  --line:#e3ebf4;
+  --shadow-sm:0 2px 8px rgba(10,38,71,.06);
+  --shadow-md:0 10px 30px rgba(10,38,71,.10);
+  --shadow-lg:0 24px 60px rgba(10,38,71,.16);
+  --radius:18px;
+  --font-ar:'Tajawal',sans-serif;
+  --font-lat:'Manrope','Tajawal',sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;min-height:100vh}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-ar);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  overflow-x:hidden;
+}
+html[dir="ltr"] body{font-family:var(--font-lat)}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
-input,textarea,select{
-  font-family:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--line);
-  border-radius:12px;font-size:.95rem;background:#fff;color:var(--ink);
-  transition:border-color .25s,box-shadow .25s;
+.container{width:min(1180px,92%);margin-inline:auto}
+section{padding:76px 0}
+.section-head{text-align:center;max-width:640px;margin:0 auto 46px}
+.section-head .kicker{
+  display:inline-block;font-size:.85rem;font-weight:700;color:var(--teal-dark);
+  background:rgba(15,185,177,.1);border:1px solid rgba(15,185,177,.25);
+  padding:4px 16px;border-radius:999px;margin-bottom:14px;letter-spacing:.5px;
 }
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,185,177,.15)}
-textarea{resize:vertical;min-height:74px}
-label{display:block;font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:6px}
-.hint{font-size:.78rem;color:var(--muted);margin-top:4px}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:11px 22px;border-radius:12px;font-weight:700;font-size:.92rem;
-  transition:transform .25s,box-shadow .25s,opacity .25s;
-}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{background:linear-gradient(135deg,#19d3ca,var(--teal-dark));color:#fff;box-shadow:0 8px 20px rgba(15,185,177,.3)}
-.btn-navy{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff}
-.btn-ghost{background:#eef3f9;color:var(--navy)}
-.btn-danger{background:#fdecec;color:var(--danger)}
-.btn-sm{padding:7px 14px;font-size:.82rem;border-radius:10px}
+.section-head h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:800;color:var(--navy);margin-bottom:10px}
+.section-head p{color:var(--muted)}
 
-/* ---- شاشة الدخول ---- */
-#loginView{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+/* =========================================================
+   2) شاشة اختيار اللغة (أول زيارة)
+   ========================================================= */
+#langGate{
+  position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
   background:
-    radial-gradient(800px 500px at 85% -10%,rgba(15,185,177,.25),transparent 60%),
+    radial-gradient(1000px 600px at 80% -10%,rgba(15,185,177,.25),transparent 60%),
+    radial-gradient(800px 500px at 10% 110%,rgba(201,162,75,.18),transparent 60%),
     linear-gradient(150deg,#081e3a,#0a2647 55%,#123b6d);
+  opacity:1;visibility:visible;transition:opacity .5s var(--ease),visibility .5s;
 }
-.login-card{
-  width:min(400px,100%);background:#fff;border-radius:22px;padding:38px 32px;
-  box-shadow:0 30px 70px rgba(0,0,0,.35);text-align:center;
-}
-.login-logo{
-  width:70px;height:70px;margin:0 auto 16px;border-radius:20px;
+#langGate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.gate-card{text-align:center;padding:32px;animation:gateIn .8s var(--ease) both}
+@keyframes gateIn{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+.gate-logo{
+  width:86px;height:86px;margin:0 auto 20px;border-radius:24px;
   background:linear-gradient(145deg,var(--teal),var(--teal-dark));
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 18px 40px rgba(15,185,177,.35);
 }
-.login-logo svg{width:36px;height:36px}
-.login-card h1{font-size:1.3rem;color:var(--navy);margin-bottom:4px}
-.login-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:26px}
-.login-card form{text-align:start}
-#loginError{color:var(--danger);font-size:.82rem;margin-top:10px;display:none;text-align:center}
+.gate-logo svg{width:48px;height:48px}
+.gate-card h1{color:#fff;font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;letter-spacing:.5px}
+.gate-card .gate-sub{color:rgba(255,255,255,.6);margin:6px 0 34px;font-size:.95rem}
+.gate-langs{display:flex;flex-direction:column;gap:14px;width:min(340px,80vw);margin-inline:auto}
+.gate-lang{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:15px 22px;border-radius:16px;color:#fff;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(8px);font-size:1.05rem;font-weight:700;
+  transition:transform .3s var(--ease),background .3s,border-color .3s,box-shadow .3s;
+}
+.gate-lang .g-native{font-size:1.1rem}
+.gate-lang .g-hint{font-size:.78rem;font-weight:400;color:rgba(255,255,255,.55)}
+.gate-lang:hover{
+  transform:translateY(-3px);background:rgba(15,185,177,.22);
+  border-color:var(--teal);box-shadow:0 14px 32px rgba(0,0,0,.3);
+}
+.gate-foot{margin-top:30px;color:rgba(255,255,255,.35);font-size:.8rem;letter-spacing:2px}
 
-/* ---- الهيكل العام ---- */
-#adminView{display:none}
-.topbar{
-  background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;
-  padding:14px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);
+/* =========================================================
+   3) الترويسة (Header)
+   ========================================================= */
+header{
+  position:fixed;top:0;inset-inline:0;z-index:600;
+  transition:background .35s,box-shadow .35s,padding .35s;
+  padding:18px 0;background:transparent;
 }
-.topbar .wrap{width:min(1100px,94%);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.topbar .tb-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
-.topbar .tb-logo{width:38px;height:38px;border-radius:11px;overflow:hidden;background:linear-gradient(145deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center}
-.topbar .tb-logo img{width:100%;height:100%;object-fit:cover}
-.topbar .tb-logo svg{width:20px;height:20px}
-.topbar .tb-actions{display:flex;gap:8px;flex-wrap:wrap}
-.topbar .btn{padding:8px 16px;font-size:.83rem}
-.topbar .btn-light{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
-main{width:min(1100px,94%);margin:26px auto 60px}
-
-/* ---- التبويبات ---- */
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.tab-btn{
-  padding:10px 22px;border-radius:12px;font-weight:700;font-size:.9rem;
-  background:#fff;color:var(--muted);border:1.5px solid var(--line);transition:all .25s;
-}
-.tab-btn.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-color:transparent}
-.tab-panel{display:none}
-.tab-panel.active{display:block;animation:fadeIn .35s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 3px 12px rgba(10,38,71,.05);margin-bottom:20px}
-.card h2{font-size:1.1rem;color:var(--navy);margin-bottom:6px}
-.card .card-sub{font-size:.85rem;color:var(--muted);margin-bottom:20px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}}
-.field{margin-bottom:16px}
-
-/* ---- جدول المنتجات ---- */
-.products-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.p-list{display:grid;gap:12px}
-.p-row{
-  display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);
-  border-radius:14px;padding:14px 18px;transition:box-shadow .25s;
-}
-.p-row:hover{box-shadow:var(--shadow)}
-.p-thumb{
-  width:56px;height:56px;border-radius:12px;flex-shrink:0;overflow:hidden;
-  background:linear-gradient(145deg,#eef4fa,#dde9f5);
-  display:flex;align-items:center;justify-content:center;font-size:1.7rem;
-}
-.p-thumb img{width:100%;height:100%;object-fit:cover}
-.p-info{flex:1;min-width:0}
-.p-info h3{font-size:.98rem;color:var(--navy)}
-.p-info .meta{font-size:.78rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
-.p-info .meta .badge-tag{color:var(--gold);font-weight:700}
-.p-actions{display:flex;gap:8px;flex-shrink:0}
-.empty-msg{text-align:center;color:var(--muted);padding:36px 0}
-
-/* ---- النافذة المنبثقة (Modal) ---- */
-.modal-overlay{
-  position:fixed;inset:0;z-index:200;background:rgba(6,20,38,.6);backdrop-filter:blur(4px);
-  display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;
-}
-.modal-overlay.open{display:flex}
-.modal{
-  width:min(680px,100%);background:#fff;border-radius:20px;padding:30px;
-  box-shadow:0 30px 80px rgba(0,0,0,.35);animation:fadeIn .3s ease;
-}
-.modal h2{color:var(--navy);font-size:1.15rem;margin-bottom:20px}
-.lang-fields{border:1.5px dashed var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
-.lang-fields legend,.lang-fields .lf-title{font-size:.85rem;font-weight:800;color:var(--teal-dark);padding:0 8px;margin-bottom:10px}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
-.img-preview{
-  margin-top:10px;width:110px;height:110px;border-radius:14px;border:1.5px solid var(--line);
-  background:linear-gradient(145deg,#eef4fa,#dde9f5);overflow:hidden;
-  display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--muted);
-}
-.img-preview img{width:100%;height:100%;object-fit:cover}
-
-/* ---- الشعار ---- */
-.logo-preview{
-  width:140px;height:140px;border-radius:22px;border:1.5px solid var(--line);overflow:hidden;
+header.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);box-shadow:var(--shadow-sm);padding:10px 0}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{
+  width:48px;height:48px;border-radius:14px;overflow:hidden;flex-shrink:0;
   background:linear-gradient(145deg,var(--teal),var(--teal-dark));
-  display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);
 }
-.logo-preview img{width:100%;height:100%;object-fit:cover}
-.logo-preview svg{width:56px;height:56px}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-logo svg{width:27px;height:27px}
+.brand-name{font-weight:800;font-size:1.2rem;color:#fff;line-height:1.2;transition:color .35s}
+.brand-name small{display:block;font-size:.68rem;font-weight:500;color:rgba(255,255,255,.65);letter-spacing:1.5px;transition:color .35s}
+header.scrolled .brand-name{color:var(--navy)}
+header.scrolled .brand-name small{color:var(--muted)}
+nav.main-nav{display:flex;gap:6px}
+nav.main-nav a{
+  color:rgba(255,255,255,.85);font-weight:500;font-size:.95rem;
+  padding:8px 14px;border-radius:10px;transition:background .3s,color .3s;
+}
+nav.main-nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+header.scrolled nav.main-nav a{color:var(--ink)}
+header.scrolled nav.main-nav a:hover{background:rgba(15,185,177,.1);color:var(--teal-dark)}
+.header-actions{display:flex;align-items:center;gap:10px}
 
-/* ---- إشعار ---- */
-#toast{
-  position:fixed;bottom:26px;inset-inline-start:50%;transform:translateX(50%) translateY(80px);
-  background:var(--navy);color:#fff;padding:13px 26px;border-radius:14px;font-weight:700;
-  font-size:.9rem;box-shadow:var(--shadow);z-index:400;opacity:0;transition:all .4s cubic-bezier(.22,.61,.36,1);
-  max-width:90vw;text-align:center;
+/* زر تبديل اللغة */
+.lang-switch{position:relative}
+.lang-btn{
+  display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;
+  color:#fff;font-weight:700;font-size:.9rem;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  transition:background .3s,color .35s,border-color .35s;
 }
-html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
-#toast.show{opacity:1;transform:translateX(50%) translateY(0)}
-#toast.ok{background:var(--ok)}
-#toast.err{background:var(--danger)}
-.note{
-  background:#fff8e8;border:1px solid #f0dfae;border-radius:12px;
-  padding:14px 18px;font-size:.85rem;color:#7a5c14;margin-bottom:20px;
+.lang-btn:hover{background:rgba(255,255,255,.22)}
+header.scrolled .lang-btn{color:var(--navy);background:rgba(10,38,71,.06);border-color:var(--line)}
+.lang-menu{
+  position:absolute;top:calc(100% + 10px);inset-inline-end:0;min-width:170px;
+  background:#fff;border-radius:14px;box-shadow:var(--shadow-lg);border:1px solid var(--line);
+  padding:8px;opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:all .3s var(--ease);z-index:700;
 }
+.lang-switch.open .lang-menu{opacity:1;visibility:visible;transform:none}
+.lang-menu button{
+  display:flex;align-items:center;justify-content:space-between;width:100%;
+  padding:10px 14px;border-radius:10px;font-size:.92rem;font-weight:600;color:var(--ink);
+  transition:background .25s;
+}
+.lang-menu button:hover{background:var(--bg)}
+.lang-menu button.active{background:rgba(15,185,177,.12);color:var(--teal-dark)}
+.burger{display:none;flex-direction:column;gap:5px;padding:10px}
+.burger span{width:24px;height:2.5px;border-radius:2px;background:#fff;transition:background .35s}
+header.scrolled .burger span{background:var(--navy)}
+@media (max-width:900px){
+  nav.main-nav{
+    position:fixed;top:0;bottom:0;inset-inline-end:-300px;width:270px;z-index:800;
+    background:var(--navy);flex-direction:column;padding:90px 24px;gap:8px;
+    transition:inset-inline-end .4s var(--ease);box-shadow:var(--shadow-lg);
+  }
+  nav.main-nav.open{inset-inline-end:0}
+  nav.main-nav a,header.scrolled nav.main-nav a{color:#fff;font-size:1.05rem}
+  .burger{display:flex}
+}
+
+/* =========================================================
+   4) قسم البطل (Hero)
+   ========================================================= */
+.hero{
+  position:relative;min-height:92vh;display:flex;align-items:center;padding:150px 0 90px;
+  background:
+    radial-gradient(900px 500px at 85% 0%,rgba(15,185,177,.28),transparent 55%),
+    radial-gradient(700px 450px at 0% 100%,rgba(201,162,75,.14),transparent 60%),
+    linear-gradient(160deg,#081e3a 0%,#0a2647 50%,#144a86 100%);
+  overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;opacity:.05;pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px,#fff 1px,transparent 0);
+  background-size:34px 34px;
+}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;
+  background:rgba(15,185,177,.15);border:1px solid rgba(15,185,177,.4);
+  color:#7ee8e2;font-size:.85rem;font-weight:700;margin-bottom:22px;
+}
+.hero h1{
+  color:#fff;font-size:clamp(1.9rem,4.6vw,3.3rem);font-weight:900;line-height:1.35;margin-bottom:18px;
+}
+.hero h1 .accent{
+  background:linear-gradient(90deg,var(--teal),#7ee8e2);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:rgba(255,255,255,.7);font-size:1.06rem;max-width:520px;margin-bottom:34px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 30px;border-radius:14px;font-weight:700;font-size:1rem;
+  transition:transform .3s var(--ease),box-shadow .3s,background .3s;
+}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{
+  color:#06231f;background:linear-gradient(135deg,#19d3ca,var(--teal));
+  box-shadow:0 14px 34px rgba(15,185,177,.4);
+}
+.btn-primary:hover{box-shadow:0 20px 44px rgba(15,185,177,.5)}
+.btn-outline{color:#fff;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.35)}
+.btn-outline:hover{background:rgba(255,255,255,.14);border-color:#fff}
+.btn-gold{
+  color:#2f2405;background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  box-shadow:0 14px 34px rgba(201,162,75,.35);
+}
+.hero-reassure{
+  margin-top:22px;color:rgba(255,255,255,.55);font-size:.87rem;
+  display:flex;align-items:center;gap:8px;
+}
+.hero-visual{position:relative;display:flex;justify-content:center}
+.hero-card{
+  width:min(360px,100%);border-radius:26px;padding:30px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(14px);box-shadow:var(--shadow-lg);
+  animation:floatY 6s ease-in-out infinite;
+}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.hero-card .hc-icon{font-size:3rem;margin-bottom:12px}
+.hero-card h3{color:#fff;font-size:1.15rem;margin-bottom:6px}
+.hero-card p{color:rgba(255,255,255,.65);font-size:.9rem;margin:0}
+.hero-card .hc-row{display:flex;align-items:center;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14)}
+.hero-card .hc-dot{width:10px;height:10px;border-radius:50%;background:#2ee6a8;box-shadow:0 0 0 5px rgba(46,230,168,.18)}
+.hero-card .hc-row span{color:rgba(255,255,255,.8);font-size:.85rem;font-weight:600}
+.hero-chip{
+  position:absolute;padding:10px 18px;border-radius:14px;font-size:.82rem;font-weight:700;
+  background:#fff;color:var(--navy);box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:8px;animation:floatY 7s ease-in-out infinite;
+}
+.hero-chip.chip-1{top:6%;inset-inline-start:-4%;animation-delay:.8s}
+.hero-chip.chip-2{bottom:4%;inset-inline-end:-2%;animation-delay:1.6s}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .hero{min-height:auto}
+}
+
+/* =========================================================
+   5) شارات الثقة + الإحصائيات
+   ========================================================= */
+.trust-strip{padding:0;transform:translateY(-46px);margin-bottom:-20px}
+.trust-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  background:var(--card);border-radius:22px;box-shadow:var(--shadow-md);
+  border:1px solid var(--line);padding:26px;
+}
+.trust-item{display:flex;align-items:center;gap:14px}
+.trust-item .t-ico{
+  width:50px;height:50px;flex-shrink:0;border-radius:14px;font-size:1.4rem;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,rgba(15,185,177,.14),rgba(15,185,177,.05));
+  border:1px solid rgba(15,185,177,.25);
+}
+.trust-item h4{font-size:.95rem;color:var(--navy);font-weight:800}
+.trust-item p{font-size:.8rem;color:var(--muted);margin:0}
+@media (max-width:900px){.trust-cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.trust-cards{grid-template-columns:1fr}}
+.stats{padding:60px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat-box{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:30px 16px;box-shadow:var(--shadow-sm);
+  transition:transform .35s var(--ease),box-shadow .35s;
+}
+.stat-box:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.stat-box .num{
+  font-size:2.3rem;font-weight:900;color:var(--navy);
+  font-family:var(--font-lat);line-height:1.2;
+}
+.stat-box .num .plus{color:var(--teal)}
+.stat-box .lbl{color:var(--muted);font-size:.9rem;font-weight:600}
+@media (max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* =========================================================
+   6) التصنيفات
+   ========================================================= */
+.cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cat-card{
+  position:relative;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:30px 24px;overflow:hidden;cursor:pointer;
+  transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;
+}
+.cat-card::before{
+  content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,var(--teal),var(--gold));
+  transform:scaleY(0);transform-origin:top;transition:transform .4s var(--ease);
+}
+.cat-card:hover{transform:translateY(-7px);box-shadow:var(--shadow-md);border-color:rgba(15,185,177,.4)}
+.cat-card:hover::before{transform:scaleY(1)}
+.cat-card .c-ico{
+  width:58px;height:58px;border-radius:16px;font-size:1.7rem;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,var(--navy),var(--navy-3));
+  box-shadow:0 10px 22px rgba(10,38,71,.25);
+}
+.cat-card h3{color:var(--navy);font-size:1.08rem;font-weight:800;margin-bottom:6px}
+.cat-card p{color:var(--muted);font-size:.88rem;margin-bottom:14px}
+.cat-card .c-link{color:var(--teal-dark);font-weight:700;font-size:.88rem;display:inline-flex;align-items:center;gap:6px}
+@media (max-width:900px){.cats-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.cats-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   7) المنتجات
+   ========================================================= */
+#products{background:linear-gradient(180deg,var(--bg),#eaf1f9 60%,var(--bg))}
+.filter-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:38px}
+.filter-chip{
+  padding:9px 20px;border-radius:999px;font-weight:700;font-size:.88rem;color:var(--muted);
+  background:var(--card);border:1.5px solid var(--line);
+  transition:all .3s var(--ease);
+}
+.filter-chip:hover{border-color:var(--teal);color:var(--teal-dark)}
+.filter-chip.active{
+  background:linear-gradient(135deg,var(--navy),var(--navy-3));
+  color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(10,38,71,.25);
+}
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.product-card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .45s var(--ease),box-shadow .45s;
+  transform-style:preserve-3d;
+}
+.product-card:hover{transform:translateY(-8px) rotateX(1.2deg);box-shadow:var(--shadow-lg)}
+.p-media{
+  position:relative;height:210px;cursor:zoom-in;overflow:hidden;
+  background:linear-gradient(145deg,#eef4fa,#dde9f5);
+  display:flex;align-items:center;justify-content:center;
+}
+.p-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.product-card:hover .p-media img{transform:scale(1.06)}
+.p-media .p-emoji{font-size:4.2rem;filter:drop-shadow(0 10px 16px rgba(10,38,71,.18));transition:transform .5s var(--ease)}
+.product-card:hover .p-emoji{transform:scale(1.12) translateY(-4px)}
+.p-badge{
+  position:absolute;top:14px;inset-inline-start:14px;z-index:2;
+  padding:5px 14px;border-radius:999px;font-size:.75rem;font-weight:800;
+}
+.p-badge.best{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3a2b05;box-shadow:0 6px 16px rgba(201,162,75,.4)}
+.p-badge.new{background:linear-gradient(135deg,#19d3ca,var(--teal));color:#06312e}
+.p-cat-tag{
+  position:absolute;bottom:12px;inset-inline-end:12px;padding:4px 12px;border-radius:999px;
+  background:rgba(10,38,71,.75);color:#fff;font-size:.72rem;font-weight:600;backdrop-filter:blur(4px);
+}
+.p-body{padding:20px 22px 24px;display:flex;flex-direction:column;flex:1}
+.p-body h3{color:var(--navy);font-size:1.06rem;font-weight:800;margin-bottom:6px}
+.p-body .p-desc{color:var(--muted);font-size:.86rem;flex:1;margin-bottom:16px}
+.p-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.p-price{font-weight:900;color:var(--navy);font-size:1.05rem;font-family:var(--font-lat)}
+.p-price small{font-size:.72rem;color:var(--muted);font-weight:600}
+.p-price.ask{font-size:.85rem;color:var(--teal-dark);font-family:var(--font-ar)}
+html[dir="ltr"] .p-price.ask{font-family:var(--font-lat)}
+.btn-wa{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;
+  background:linear-gradient(135deg,#2bb673,#128c7e);color:#fff;font-weight:700;font-size:.85rem;
+  box-shadow:0 8px 18px rgba(18,140,126,.32);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(18,140,126,.42)}
+.btn-wa svg{width:17px;height:17px;flex-shrink:0}
+.no-products{grid-column:1/-1;text-align:center;color:var(--muted);padding:50px 0}
+@media (max-width:960px){.products-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.products-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   7.5) شريط العبارة العاطفية
+   ========================================================= */
+.emotion-strip{padding:66px 0}
+.emotion-inner{
+  text-align:center;max-width:680px;margin-inline:auto;padding:44px 32px;
+  background:var(--card);border:1px solid var(--line);border-radius:26px;
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.emotion-inner::before{
+  content:"";position:absolute;top:0;inset-inline:0;height:4px;
+  background:linear-gradient(90deg,var(--teal),var(--gold));
+}
+.emotion-inner .e-ico{font-size:2.2rem;display:block;margin-bottom:14px}
+.emotion-inner h2{
+  color:var(--navy);font-size:clamp(1.25rem,2.6vw,1.7rem);font-weight:800;
+  line-height:1.6;margin-bottom:12px;
+}
+.emotion-inner p{color:var(--muted);font-size:.95rem;max-width:540px;margin-inline:auto}
+
+/* =========================================================
+   8) قسم المؤسسات (B2B)
+   ========================================================= */
+#b2b{padding:0}
+.b2b-panel{
+  position:relative;border-radius:28px;overflow:hidden;padding:64px 52px;
+  background:
+    radial-gradient(700px 400px at 90% 10%,rgba(201,162,75,.3),transparent 55%),
+    radial-gradient(500px 350px at 5% 95%,rgba(15,185,177,.2),transparent 60%),
+    linear-gradient(140deg,#081e3a,#0e315c 60%,#123b6d);
+  box-shadow:var(--shadow-lg);
+}
+.b2b-panel::before{
+  content:"";position:absolute;inset:0;opacity:.06;pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px,#fff 1px,transparent 0);background-size:28px 28px;
+}
+.b2b-grid{position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center}
+.b2b-tag{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;
+  background:rgba(201,162,75,.16);border:1px solid rgba(201,162,75,.5);
+  color:var(--gold-light);font-size:.83rem;font-weight:800;margin-bottom:18px;letter-spacing:.5px;
+}
+.b2b-grid h2{color:#fff;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:900;line-height:1.45;margin-bottom:14px}
+.b2b-grid .b2b-sub{color:rgba(255,255,255,.68);margin-bottom:26px;max-width:480px}
+.b2b-points{display:grid;gap:12px;margin-bottom:32px}
+.b2b-points li{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.85);font-size:.94rem;list-style:none}
+.b2b-points .chk{
+  width:24px;height:24px;flex-shrink:0;border-radius:8px;font-size:.75rem;color:#06231f;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  display:flex;align-items:center;justify-content:center;font-weight:900;
+}
+.b2b-side{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;padding:34px 30px;text-align:center;backdrop-filter:blur(10px);
+}
+.b2b-side .b-ico{font-size:2.6rem;margin-bottom:12px}
+.b2b-side h3{color:#fff;font-size:1.15rem;margin-bottom:8px}
+.b2b-side p{color:rgba(255,255,255,.6);font-size:.88rem;margin-bottom:22px}
+.b2b-side .b2b-num{
+  color:var(--gold-light);font-family:var(--font-lat);font-weight:800;font-size:1.05rem;
+  letter-spacing:1px;margin-bottom:18px;direction:ltr;
+}
+@media (max-width:900px){
+  .b2b-grid{grid-template-columns:1fr}
+  .b2b-panel{padding:46px 28px}
+}
+
+/* =========================================================
+   9) لماذا Rim Medical + التقييمات
+   ========================================================= */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.why-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:32px 26px;transition:transform .4s var(--ease),box-shadow .4s;
+}
+.why-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.why-card .w-ico{
+  width:54px;height:54px;border-radius:15px;font-size:1.5rem;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,rgba(201,162,75,.16),rgba(201,162,75,.05));
+  border:1px solid rgba(201,162,75,.35);
+}
+.why-card h3{color:var(--navy);font-size:1.05rem;font-weight:800;margin-bottom:8px}
+.why-card p{color:var(--muted);font-size:.88rem}
+@media (max-width:860px){.why-grid{grid-template-columns:1fr}}
+#reviews{background:linear-gradient(180deg,var(--bg),#eaf1f9)}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.review-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px 26px;position:relative;
+  transition:transform .4s var(--ease),box-shadow .4s;
+}
+.review-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.review-card .stars{color:var(--gold);letter-spacing:3px;margin-bottom:12px;font-size:.95rem}
+.review-card .quote{color:var(--ink);font-size:.92rem;margin-bottom:18px}
+.review-meta{display:flex;align-items:center;gap:12px}
+.review-meta .avatar{
+  width:44px;height:44px;border-radius:50%;font-weight:800;color:#fff;font-size:1rem;
+  background:linear-gradient(145deg,var(--navy),var(--navy-3));
+  display:flex;align-items:center;justify-content:center;
+}
+.review-meta h4{font-size:.92rem;color:var(--navy)}
+.review-meta span{font-size:.78rem;color:var(--muted)}
+@media (max-width:860px){.reviews-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   10) التذييل (Footer)
+   ========================================================= */
+footer{
+  background:linear-gradient(160deg,#081e3a,#0a2647);
+  color:rgba(255,255,255,.7);padding:64px 0 0;margin-top:40px;
+}
+.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;padding-bottom:44px}
+.footer-grid h4{color:#fff;font-size:1rem;font-weight:800;margin-bottom:18px}
+.f-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.f-brand .brand-logo{width:44px;height:44px}
+.f-brand .fb-name{color:#fff;font-weight:800;font-size:1.1rem}
+.footer-grid p{font-size:.88rem}
+.f-contact{display:grid;gap:14px}
+.f-num{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  transition:background .3s,border-color .3s;
+}
+.f-num:hover{background:rgba(15,185,177,.14);border-color:rgba(15,185,177,.4)}
+.f-num .fn-ico{font-size:1.2rem}
+.f-num .fn-lbl{font-size:.75rem;color:rgba(255,255,255,.5)}
+.f-num .fn-val{color:#fff;font-weight:700;font-family:var(--font-lat);direction:ltr;font-size:.92rem}
+.f-hours li{list-style:none;display:flex;justify-content:space-between;gap:10px;font-size:.86rem;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.1)}
+.f-hours li span:last-child{color:#fff;font-weight:600}
+.f-social{display:flex;gap:10px;margin-top:18px}
+.f-social a{
+  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:1.05rem;
+  transition:background .3s,transform .3s;
+}
+.f-social a:hover{background:var(--teal);transform:translateY(-3px)}
+.copyright{
+  border-top:1px solid rgba(255,255,255,.1);padding:20px 0;text-align:center;
+  font-size:.82rem;color:rgba(255,255,255,.4);
+}
+@media (max-width:820px){.footer-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   11) عناصر عائمة + Lightbox + حركات التمرير
+   ========================================================= */
+.float-wa{
+  position:fixed;bottom:26px;inset-inline-end:26px;z-index:500;
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,#2bb673,#128c7e);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 14px 34px rgba(18,140,126,.45);
+  transition:transform .3s var(--ease);
+}
+.float-wa:hover{transform:scale(1.1)}
+.float-wa svg{width:28px;height:28px;fill:#fff}
+.float-wa::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:2px solid rgba(43,182,115,.5);animation:pulse 2s infinite;
+}
+@keyframes pulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
+#lightbox{
+  position:fixed;inset:0;z-index:900;background:rgba(6,20,38,.9);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:30px;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;
+}
+#lightbox.open{opacity:1;visibility:visible}
+.lb-inner{max-width:min(640px,94vw);text-align:center;transform:scale(.94);transition:transform .35s var(--ease)}
+#lightbox.open .lb-inner{transform:none}
+.lb-media{
+  border-radius:22px;overflow:hidden;background:linear-gradient(145deg,#eef4fa,#dde9f5);
+  min-height:280px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);
+}
+.lb-media img{max-height:60vh;width:auto;max-width:100%}
+.lb-media .p-emoji{font-size:7rem}
+.lb-thumbs{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.lb-thumb{
+  width:62px;height:62px;border-radius:12px;overflow:hidden;padding:0;
+  border:2.5px solid rgba(255,255,255,.25);opacity:.65;
+  transition:opacity .25s,border-color .25s,transform .25s;
+}
+.lb-thumb img{width:100%;height:100%;object-fit:cover}
+.lb-thumb:hover{opacity:1}
+.lb-thumb.active{opacity:1;border-color:var(--teal);transform:scale(1.06)}
+.p-imgcount{
+  position:absolute;bottom:12px;inset-inline-start:12px;padding:3px 10px;border-radius:999px;
+  background:rgba(255,255,255,.85);color:var(--navy);font-size:.72rem;font-weight:700;
+}
+.lb-inner h3{color:#fff;margin-top:18px;font-size:1.2rem}
+.lb-inner p{color:rgba(255,255,255,.65);font-size:.9rem;max-width:480px;margin:6px auto 0}
+.lb-close{
+  position:absolute;top:24px;inset-inline-end:24px;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;transition:background .3s;
+}
+.lb-close:hover{background:rgba(255,255,255,.25)}
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
 </style>
 </head>
 <body>
 
-<!-- ============ شاشة الدخول ============ -->
-<div id="loginView">
-  <div class="login-card">
-    <div class="login-logo">
+<!-- ====== شاشة اختيار اللغة ====== -->
+<div id="langGate" aria-modal="true" role="dialog">
+  <div class="gate-card">
+    <div class="gate-logo" id="gateLogo">
       <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
     </div>
-    <h1>لوحة تحكم Rim Medical</h1>
-    <div class="sub">منطقة خاصة بالإدارة فقط</div>
-    <form id="loginForm">
-      <div class="field">
-        <label for="loginPass">كلمة المرور</label>
-        <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" autocomplete="current-password" required>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%">دخول</button>
-      <div id="loginError">كلمة المرور غير صحيحة</div>
-    </form>
+    <h1>Rim Medical</h1>
+    <div class="gate-sub">اختر لغتك &nbsp;·&nbsp; Choisissez votre langue &nbsp;·&nbsp; Choose your language</div>
+    <div class="gate-langs">
+      <button class="gate-lang" data-lang="ar"><span class="g-native">العربية</span><span class="g-hint">Arabic</span></button>
+      <button class="gate-lang" data-lang="fr"><span class="g-native">Français</span><span class="g-hint">French</span></button>
+      <button class="gate-lang" data-lang="en"><span class="g-native">English</span><span class="g-hint">English</span></button>
+    </div>
+    <div class="gate-foot">MEDICAL EQUIPMENT &amp; SUPPLIES</div>
   </div>
 </div>
 
-<!-- ============ لوحة التحكم ============ -->
-<div id="adminView">
-  <div class="topbar">
-    <div class="wrap">
-      <div class="tb-brand">
-        <span class="tb-logo" id="tbLogo">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
-        </span>
-        لوحة تحكم Rim Medical
+<!-- ====== الترويسة ====== -->
+<header id="header">
+  <div class="container nav-wrap">
+    <a href="#home" class="brand">
+      <span class="brand-logo" id="brandLogo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-name">Rim Medical<small data-i18n="brandTag"></small></span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="#home" data-i18n="nav.home"></a>
+      <a href="#categories" data-i18n="nav.categories"></a>
+      <a href="#products" data-i18n="nav.products"></a>
+      <a href="#b2b" data-i18n="nav.b2b"></a>
+      <a href="#reviews" data-i18n="nav.reviews"></a>
+      <a href="#contact" data-i18n="nav.contact"></a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-switch" id="langSwitch">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true">
+          <span>🌐</span><span id="langCurrent">العربية</span><span style="font-size:.7rem">▾</span>
+        </button>
+        <div class="lang-menu">
+          <button data-lang="ar">العربية <span>🇲🇷</span></button>
+          <button data-lang="fr">Français <span>🇫🇷</span></button>
+          <button data-lang="en">English <span>🇬🇧</span></button>
+        </div>
       </div>
-      <div class="tb-actions">
-        <a href="../index.html" target="_blank" class="btn btn-light">👁️ معاينة الموقع</a>
-        <button class="btn btn-light" id="logoutBtn">خروج 🚪</button>
-      </div>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
+</header>
 
-  <main>
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="products">🛒 المنتجات</button>
-      <button class="tab-btn" data-tab="settings">📱 أرقام التواصل</button>
-      <button class="tab-btn" data-tab="logo">🖼️ الشعار</button>
-      <button class="tab-btn" data-tab="publish">🚀 النشر والنسخ الاحتياطي</button>
+<!-- ====== Hero ====== -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <span class="hero-badge">✚ <span data-i18n="hero.badge"></span></span>
+      <h1><span data-i18n="hero.title1"></span> <span class="accent" data-i18n="hero.title2"></span></h1>
+      <p data-i18n="hero.sub"></p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn-primary" data-i18n="hero.ctaProducts"></a>
+        <a href="#b2b" class="btn btn-outline" data-i18n="hero.ctaB2b"></a>
+      </div>
+      <p class="hero-reassure">💙 <span data-i18n="hero.reassure"></span></p>
     </div>
-
-    <!-- ===== تبويب المنتجات ===== -->
-    <div class="tab-panel active" id="tab-products">
-      <div class="card">
-        <div class="products-toolbar">
-          <div>
-            <h2>إدارة المنتجات</h2>
-            <div class="card-sub" style="margin:0">إضافة وتعديل وحذف المنتجات بالثلاث لغات</div>
-          </div>
-          <button class="btn btn-primary" id="addProductBtn">＋ إضافة منتج جديد</button>
-        </div>
-        <div class="p-list" id="productsList"></div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hc-icon">🏥</div>
+        <h3 data-i18n="hero.cardTitle"></h3>
+        <p data-i18n="hero.cardSub"></p>
+        <div class="hc-row"><span class="hc-dot"></span><span data-i18n="hero.cardStatus"></span></div>
       </div>
+      <div class="hero-chip chip-1">✅ <span data-i18n="hero.chip1"></span></div>
+      <div class="hero-chip chip-2">🚚 <span data-i18n="hero.chip2"></span></div>
     </div>
+  </div>
+</section>
 
-    <!-- ===== تبويب أرقام التواصل ===== -->
-    <div class="tab-panel" id="tab-settings">
-      <div class="card">
-        <h2>أرقام واتساب</h2>
-        <div class="card-sub">رقمان منفصلان تماماً: الأول للزبائن الأفراد والثاني للمؤسسات. اكتب الرقم بالصيغة الدولية بدون + أو أصفار (مثال: 22228646987)</div>
-        <div class="grid-2">
-          <div class="field">
-            <label for="setCustomerWa">👤 رقم واتساب الزبائن (أفراد)</label>
-            <input type="text" id="setCustomerWa" dir="ltr" placeholder="22228646987">
-            <div class="hint">يُستخدم في أزرار طلب المنتجات والزر العائم</div>
-          </div>
-          <div class="field">
-            <label for="setB2bWa">🏢 رقم واتساب المؤسسات (جملة)</label>
-            <input type="text" id="setB2bWa" dir="ltr" placeholder="22236199416">
-            <div class="hint">يُستخدم في قسم المؤسسات فقط</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>إحصائيات الموقع (الدليل الاجتماعي)</h2>
-        <div class="card-sub">الأرقام التي تظهر في قسم العدادات المتحركة</div>
-        <div class="grid-2">
-          <div class="field"><label>📦 طلبات تم تسليمها</label><input type="number" id="setOrders" min="0"></div>
-          <div class="field"><label>😊 زبائن راضون</label><input type="number" id="setClients" min="0"></div>
-          <div class="field"><label>🏢 مؤسسات شريكة</label><input type="number" id="setPartners" min="0"></div>
-          <div class="field"><label>📅 سنوات الخبرة</label><input type="number" id="setYears" min="0"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>روابط التواصل الاجتماعي</h2>
-        <div class="card-sub">اترك الحقل فارغاً لإخفاء الأيقونة من الموقع</div>
-        <div class="grid-3">
-          <div class="field"><label>فيسبوك</label><input type="url" id="setFacebook" dir="ltr" placeholder="https://facebook.com/..."></div>
-          <div class="field"><label>إنستغرام</label><input type="url" id="setInstagram" dir="ltr" placeholder="https://instagram.com/..."></div>
-          <div class="field"><label>تيك توك</label><input type="url" id="setTiktok" dir="ltr" placeholder="https://tiktok.com/@..."></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>تغيير كلمة مرور اللوحة</h2>
-        <div class="card-sub">كلمة المرور الافتراضية: <b dir="ltr">rim2026</b> — ننصح بتغييرها فوراً</div>
-        <div class="grid-2">
-          <div class="field"><label>كلمة المرور الجديدة</label><input type="password" id="newPass" autocomplete="new-password"></div>
-          <div class="field"><label>تأكيد كلمة المرور</label><input type="password" id="newPass2" autocomplete="new-password"></div>
-        </div>
-        <button class="btn btn-navy btn-sm" id="changePassBtn">تغيير كلمة المرور</button>
-      </div>
-
-      <button class="btn btn-primary" id="saveSettingsBtn" style="width:100%">💾 حفظ كل الإعدادات</button>
+<!-- ====== شارات الثقة ====== -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-cards">
+      <div class="trust-item"><span class="t-ico">🛡️</span><div><h4 data-i18n="trust.t1"></h4><p data-i18n="trust.t1s"></p></div></div>
+      <div class="trust-item"><span class="t-ico">✅</span><div><h4 data-i18n="trust.t2"></h4><p data-i18n="trust.t2s"></p></div></div>
+      <div class="trust-item"><span class="t-ico">🚚</span><div><h4 data-i18n="trust.t3"></h4><p data-i18n="trust.t3s"></p></div></div>
+      <div class="trust-item"><span class="t-ico">💬</span><div><h4 data-i18n="trust.t4"></h4><p data-i18n="trust.t4s"></p></div></div>
     </div>
-
-    <!-- ===== تبويب الشعار ===== -->
-    <div class="tab-panel" id="tab-logo">
-      <div class="card">
-        <h2>شعار الموقع</h2>
-        <div class="card-sub">ارفع صورة الشعار (يُفضَّل مربعة، PNG أو JPG). تُصغَّر تلقائياً وتظهر في ترويسة الموقع وشاشة اللغة والتذييل.</div>
-        <div class="logo-preview" id="logoPreview">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
-        </div>
-        <input type="file" id="logoInput" accept="image/*" style="max-width:340px">
-        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="saveLogoBtn">💾 حفظ الشعار</button>
-          <button class="btn btn-danger" id="removeLogoBtn">إزالة الشعار (العودة للافتراضي)</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== تبويب النشر ===== -->
-    <div class="tab-panel" id="tab-publish">
-      <div class="note">
-        ⚠️ <b>مهم:</b> تعديلاتك تُحفَظ حالياً في متصفحك أنت فقط (localStorage). لكي يراها كل الزوار،
-        نزّل ملف البيانات من هنا وارفعه إلى موقعك مكان الملف <b dir="ltr">assets/data.js</b>
-        (الخطوات مشروحة في ملف README). عند الترقية إلى قاعدة بيانات Supabase تصبح هذه الخطوة تلقائية.
-      </div>
-      <div class="card">
-        <h2>📤 نشر التعديلات</h2>
-        <div class="card-sub">ينزّل ملف <b dir="ltr">data.js</b> يحتوي كل بياناتك الحالية (المنتجات + الأرقام + الشعار)</div>
-        <button class="btn btn-primary" id="exportBtn">⬇️ تنزيل ملف البيانات (data.js)</button>
-      </div>
-      <div class="card">
-        <h2>💾 نسخة احتياطية / استعادة</h2>
-        <div class="card-sub">احفظ نسخة JSON من بياناتك أو استعد نسخة سابقة</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-navy" id="backupBtn">⬇️ تنزيل نسخة احتياطية (JSON)</button>
-          <label class="btn btn-ghost" style="margin:0">
-            ⬆️ استعادة من ملف JSON
-            <input type="file" id="importInput" accept=".json,application/json" hidden>
-          </label>
-        </div>
-      </div>
-      <div class="card">
-        <h2>♻️ إعادة التعيين</h2>
-        <div class="card-sub">حذف كل التعديلات المحلية والعودة إلى بيانات الملف <b dir="ltr">assets/data.js</b></div>
-        <button class="btn btn-danger" id="resetBtn">حذف التعديلات المحلية</button>
-      </div>
-    </div>
-  </main>
-</div>
-
-<!-- ============ نافذة إضافة/تعديل منتج ============ -->
-<div class="modal-overlay" id="productModal">
-  <div class="modal">
-    <h2 id="modalTitle">إضافة منتج جديد</h2>
-    <form id="productForm">
-      <input type="hidden" id="pId">
-
-      <div class="lang-fields">
-        <div class="lf-title">🇲🇷 العربية</div>
-        <div class="field"><label>اسم المنتج (عربي) *</label><input type="text" id="pNameAr" required></div>
-        <div class="field" style="margin:0"><label>الوصف (عربي) *</label><textarea id="pDescAr" required></textarea></div>
-      </div>
-
-      <div class="lang-fields">
-        <div class="lf-title">🇫🇷 Français</div>
-        <div class="field"><label>Nom du produit (français) *</label><input type="text" id="pNameFr" dir="ltr" required></div>
-        <div class="field" style="margin:0"><label>Description (français) *</label><textarea id="pDescFr" dir="ltr" required></textarea></div>
-      </div>
-
-      <div class="lang-fields">
-        <div class="lf-title">🇬🇧 English</div>
-        <div class="field"><label>Product name (English) *</label><input type="text" id="pNameEn" dir="ltr" required></div>
-        <div class="field" style="margin:0"><label>Description (English) *</label><textarea id="pDescEn" dir="ltr" required></textarea></div>
-      </div>
-
-      <div class="grid-2">
-        <div class="field">
-          <label>التصنيف *</label>
-          <select id="pCategory" required>
-            <option value="mobility">معدات الحركة والتنقل</option>
-            <option value="monitoring">أجهزة القياس والمراقبة</option>
-            <option value="hearing">المستلزمات السمعية</option>
-            <option value="orthopedic">الدعامات والتقويم</option>
-            <option value="homecare">مستلزمات العناية المنزلية</option>
-            <option value="beds">أسرّة ومعدات طبية ثقيلة</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>الشارة</label>
-          <select id="pBadge">
-            <option value="">بدون شارة</option>
-            <option value="best">⭐ الأكثر طلباً</option>
-            <option value="new">🆕 جديد</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>السعر بالأوقية (MRU)</label>
-          <input type="number" id="pPrice" min="0" step="any" placeholder="اتركه فارغاً لعرض «السعر عند الطلب»">
-        </div>
-        <div class="field">
-          <label>أيقونة بديلة (إيموجي)</label>
-          <input type="text" id="pIcon" placeholder="🩺" maxlength="4">
-          <div class="hint">تظهر إذا لم توجد صورة للمنتج</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>صورة المنتج</label>
-        <input type="file" id="pImageInput" accept="image/*">
-        <div class="img-preview" id="pImagePreview">🩺</div>
-        <div class="hint">تُضغَط الصورة تلقائياً. اتركها فارغة لعرض الأيقونة.</div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn btn-ghost" id="cancelModalBtn">إلغاء</button>
-        <button type="submit" class="btn btn-primary">💾 حفظ المنتج</button>
-      </div>
-    </form>
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- ====== الإحصائيات ====== -->
+<section class="stats" id="stats">
+  <div class="container stats-grid">
+    <div class="stat-box reveal"><div class="num"><span class="counter" data-key="ordersDelivered">0</span><span class="plus">+</span></div><div class="lbl" data-i18n="stats.orders"></div></div>
+    <div class="stat-box reveal reveal-d1"><div class="num"><span class="counter" data-key="happyClients">0</span><span class="plus">+</span></div><div class="lbl" data-i18n="stats.clients"></div></div>
+    <div class="stat-box reveal reveal-d2"><div class="num"><span class="counter" data-key="partners">0</span><span class="plus">+</span></div><div class="lbl" data-i18n="stats.partners"></div></div>
+    <div class="stat-box reveal reveal-d3"><div class="num"><span class="counter" data-key="yearsExperience">0</span><span class="plus">+</span></div><div class="lbl" data-i18n="stats.years"></div></div>
+  </div>
+</section>
 
-<script src="../assets/data.js"></script>
-<script src="../assets/store.js"></script>
+<!-- ====== التصنيفات ====== -->
+<section id="categories">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="cats.kicker"></span>
+      <h2 data-i18n="cats.title"></h2>
+      <p data-i18n="cats.sub"></p>
+    </div>
+    <div class="cats-grid" id="catsGrid"></div>
+  </div>
+</section>
+
+<!-- ====== المنتجات ====== -->
+<section id="products">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="products.kicker"></span>
+      <h2 data-i18n="products.title"></h2>
+      <p data-i18n="products.sub"></p>
+    </div>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- ====== عبارة عاطفية ====== -->
+<section class="emotion-strip" id="emotion">
+  <div class="container">
+    <div class="emotion-inner reveal">
+      <span class="e-ico">💙</span>
+      <h2 data-i18n="emotion.quote"></h2>
+      <p data-i18n="emotion.sub"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== قسم المؤسسات B2B ====== -->
+<section id="b2b">
+  <div class="container">
+    <div class="b2b-panel reveal">
+      <div class="b2b-grid">
+        <div>
+          <span class="b2b-tag">🏢 <span data-i18n="b2b.tag"></span></span>
+          <h2 data-i18n="b2b.title"></h2>
+          <p class="b2b-sub" data-i18n="b2b.sub"></p>
+          <ul class="b2b-points">
+            <li><span class="chk">✓</span><span data-i18n="b2b.p1"></span></li>
+            <li><span class="chk">✓</span><span data-i18n="b2b.p2"></span></li>
+            <li><span class="chk">✓</span><span data-i18n="b2b.p3"></span></li>
+            <li><span class="chk">✓</span><span data-i18n="b2b.p4"></span></li>
+          </ul>
+        </div>
+        <div class="b2b-side">
+          <div class="b-ico">📦</div>
+          <h3 data-i18n="b2b.sideTitle"></h3>
+          <p data-i18n="b2b.sideSub"></p>
+          <div class="b2b-num" id="b2bNumber"></div>
+          <a href="#" class="btn btn-gold" id="b2bWaBtn" target="_blank" rel="noopener">
+            <span data-i18n="b2b.cta"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== لماذا Rim Medical ====== -->
+<section id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="why.kicker"></span>
+      <h2 data-i18n="why.title"></h2>
+      <p data-i18n="why.sub"></p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal"><span class="w-ico">🏅</span><h3 data-i18n="why.c1"></h3><p data-i18n="why.c1s"></p></div>
+      <div class="why-card reveal reveal-d1"><span class="w-ico">🤝</span><h3 data-i18n="why.c2"></h3><p data-i18n="why.c2s"></p></div>
+      <div class="why-card reveal reveal-d2"><span class="w-ico">⚡</span><h3 data-i18n="why.c3"></h3><p data-i18n="why.c3s"></p></div>
+      <div class="why-card reveal"><span class="w-ico">🧑‍⚕️</span><h3 data-i18n="why.c4"></h3><p data-i18n="why.c4s"></p></div>
+      <div class="why-card reveal reveal-d1"><span class="w-ico">💰</span><h3 data-i18n="why.c5"></h3><p data-i18n="why.c5s"></p></div>
+      <div class="why-card reveal reveal-d2"><span class="w-ico">🔄</span><h3 data-i18n="why.c6"></h3><p data-i18n="why.c6s"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== آراء الزبائن ====== -->
+<section id="reviews">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-i18n="reviews.kicker"></span>
+      <h2 data-i18n="reviews.title"></h2>
+      <p data-i18n="reviews.sub"></p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote" data-i18n="reviews.r1"></p>
+        <div class="review-meta"><span class="avatar">م</span><div><h4 data-i18n="reviews.r1n"></h4><span data-i18n="reviews.r1t"></span></div></div>
+      </div>
+      <div class="review-card reveal reveal-d1">
+        <div class="stars">★★★★★</div>
+        <p class="quote" data-i18n="reviews.r2"></p>
+        <div class="review-meta"><span class="avatar">ف</span><div><h4 data-i18n="reviews.r2n"></h4><span data-i18n="reviews.r2t"></span></div></div>
+      </div>
+      <div class="review-card reveal reveal-d2">
+        <div class="stars">★★★★★</div>
+        <p class="quote" data-i18n="reviews.r3"></p>
+        <div class="review-meta"><span class="avatar">ع</span><div><h4 data-i18n="reviews.r3n"></h4><span data-i18n="reviews.r3t"></span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== التذييل ====== -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand">
+          <span class="brand-logo" id="footerLogo">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+          </span>
+          <span class="fb-name">Rim Medical</span>
+        </div>
+        <p data-i18n="footer.about"></p>
+        <div class="f-social" id="socialLinks"></div>
+      </div>
+      <div>
+        <h4 data-i18n="footer.contactTitle"></h4>
+        <div class="f-contact">
+          <a href="#" class="f-num" id="footCustomerWa" target="_blank" rel="noopener">
+            <span class="fn-ico">👤</span>
+            <div><div class="fn-lbl" data-i18n="footer.customerLbl"></div><div class="fn-val" id="footCustomerNum"></div></div>
+          </a>
+          <a href="#" class="f-num" id="footB2bWa" target="_blank" rel="noopener">
+            <span class="fn-ico">🏢</span>
+            <div><div class="fn-lbl" data-i18n="footer.b2bLbl"></div><div class="fn-val" id="footB2bNum"></div></div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4 data-i18n="footer.hoursTitle"></h4>
+        <ul class="f-hours">
+          <li><span data-i18n="footer.days1"></span><span data-i18n="footer.hours1"></span></li>
+          <li><span data-i18n="footer.days2"></span><span data-i18n="footer.hours2"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">© <span id="year"></span> Rim Medical — <span data-i18n="footer.rights"></span></div>
+  </div>
+</footer>
+
+<!-- ====== زر واتساب عائم ====== -->
+<a href="#" class="float-wa" id="floatWa" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16 2.9C8.8 2.9 3 8.7 3 15.9c0 2.3.6 4.5 1.7 6.5L3 29.1l6.9-1.8c1.9 1 4 1.6 6.1 1.6 7.2 0 13-5.8 13-13S23.2 2.9 16 2.9zm0 23.7c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.1 1.1 1.1-4-.3-.4c-1.1-1.7-1.6-3.7-1.6-5.7C5.3 10 10.1 5.2 16 5.2S26.7 10 26.7 15.9 21.9 26.6 16 26.6zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.4c.2.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
+<!-- ====== Lightbox ====== -->
+<div id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+  <div class="lb-inner">
+    <div class="lb-media" id="lbMedia"></div>
+    <div class="lb-thumbs" id="lbThumbs"></div>
+    <h3 id="lbTitle"></h3>
+    <p id="lbDesc"></p>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="store.js"></script>
 <script>
 "use strict";
 
 /* =========================================================
-   الحماية بكلمة مرور
-   ---------------------------------------------------------
-   ملاحظة صريحة: هذه حماية على مستوى المتصفح تمنع الوصول العرضي،
-   وليست حماية خادم حقيقية. عند الترقية إلى Supabase استخدم
-   نظام تسجيل الدخول الحقيقي (Supabase Auth).
+   قاموس الترجمة — كل النصوص هنا وليست مبعثرة في الكود
    ========================================================= */
-const PASS_KEY = "rim_medical_admin_hash";
-const SESSION_KEY = "rim_medical_admin_session";
-const DEFAULT_PASS = "rim2026";
+const I18N = {
+  ar: {
+    dir: "rtl", label: "العربية",
+    brandTag: "معدات ومستلزمات طبية",
+    nav: { home:"الرئيسية", categories:"التصنيفات", products:"المنتجات", b2b:"للمؤسسات", reviews:"آراء الزبائن", contact:"اتصل بنا" },
+    hero: {
+      badge:"جودة طبية موثوقة منذ سنوات",
+      title1:"كل ما تحتاجه من", title2:"المعدات الطبية في مكان واحد",
+      sub:"أسرّة طبية، كراسي متحركة، أجهزة قياس، دعامات، ومستلزمات العناية المنزلية — منتجات أصلية بأسعار منافسة مع توصيل سريع لباب منزلك.",
+      ctaProducts:"تصفح المنتجات", ctaB2b:"طلبات الجملة للمؤسسات",
+      reassure:"استشارة مجانية قبل الشراء — نرافقك خطوة بخطوة في رحلة العناية بمن تحب",
+      cardTitle:"Rim Medical", cardSub:"شريكك الموثوق في التجهيزات الطبية للمنازل والمؤسسات",
+      cardStatus:"متوفرون الآن على واتساب", chip1:"منتجات أصلية 100%", chip2:"توصيل سريع"
+    },
+    trust: {
+      t1:"ضمان الجودة", t1s:"منتجات مفحوصة ومطابقة للمواصفات",
+      t2:"منتجات أصلية 100%", t2s:"من موردين معتمدين فقط",
+      t3:"توصيل سريع", t3s:"نصلك أينما كنت في أقرب وقت",
+      t4:"دعم مباشر", t4s:"استشارة مجانية قبل الشراء"
+    },
+    stats: { orders:"طلب تم تسليمه بنجاح", clients:"زبون راضٍ", partners:"مؤسسة شريكة", years:"سنوات خبرة" },
+    cats: {
+      kicker:"تصنيفاتنا", title:"تسوّق حسب الفئة", sub:"اختر الفئة المناسبة لاحتياجك وتصفح منتجاتها مباشرة",
+      browse:"تصفح المنتجات"
+    },
+    emotion: {
+      quote:"لأن راحة من تحب تبدأ من عنايتك به",
+      sub:"وراء كل طلب قصة اهتمام — أم تعتني بابنها، أو ابن يرد جميل والديه. يشرّفنا أن نكون جزءاً من هذه القصة."
+    },
+    products: {
+      kicker:"منتجاتنا", title:"منتجات مختارة بعناية", sub:"اطلب أي منتج بخطوتين فقط: اضغط زر واتساب وأرسل الرسالة الجاهزة",
+      all:"الكل", order:"اطلب عبر واتساب", askPrice:"السعر عند الطلب", currency:"أوقية",
+      badgeBest:"الأكثر طلباً", badgeNew:"جديد", empty:"لا توجد منتجات في هذا التصنيف حالياً",
+      waMsg:"السلام عليكم، أرغب بطلب المنتج التالي من Rim Medical:"
+    },
+    b2b: {
+      tag:"قسم المؤسسات — أسعار الجملة",
+      title:"هل أنت مؤسسة طبية أو صيدلية أو جمعية؟ نوفر أسعار جملة خاصة",
+      sub:"نورّد المعدات والمستلزمات الطبية بكميات كبيرة للعيادات والمستشفيات والصيدليات والجمعيات، مع عروض أسعار مخصصة وفواتير رسمية.",
+      p1:"أسعار جملة تفضيلية للكميات الكبيرة",
+      p2:"عروض أسعار رسمية خلال 24 ساعة",
+      p3:"توريد مستمر وعقود إطارية للمؤسسات",
+      p4:"مندوب مخصص لمتابعة طلباتكم",
+      sideTitle:"تواصل مع قسم المؤسسات", sideSub:"رقم مخصص للمؤسسات فقط — منفصل عن خدمة الأفراد",
+      cta:"تواصل عبر واتساب المؤسسات",
+      waMsg:"السلام عليكم، نحن مؤسسة ونرغب بالاستفسار عن أسعار الجملة لدى Rim Medical."
+    },
+    why: {
+      kicker:"لماذا نحن؟", title:"لماذا يثق بنا المئات؟", sub:"نحرص على أن تكون تجربتك معنا سهلة وموثوقة من أول رسالة حتى استلام طلبك",
+      c1:"جودة مضمونة", c1s:"نختار منتجاتنا من علامات موثوقة ونفحصها قبل التسليم.",
+      c2:"ثقة متراكمة", c2s:"مئات الزبائن والمؤسسات يتعاملون معنا بشكل متكرر.",
+      c3:"استجابة سريعة", c3s:"نرد على استفساراتك في واتساب بسرعة وباحترافية.",
+      c4:"استشارة مجانية", c4s:"نساعدك في اختيار المنتج المناسب لحالة مريضك.",
+      c5:"أسعار منافسة", c5s:"أسعار عادلة وشفافة، وعروض خاصة للكميات.",
+      c6:"استبدال مرن", c6s:"سياسة استبدال واضحة في حال وجود عيب مصنعي."
+    },
+    reviews: {
+      kicker:"آراء الزبائن", title:"ماذا يقول زبائننا؟", sub:"تقييمات حقيقية من أفراد ومؤسسات تعاملوا معنا",
+      r1:"«اشتريت سرير طبي كهربائي لوالدي، وصل بسرعة وجودته ممتازة. تعامل راقٍ وخدمة ما بعد البيع رائعة.»",
+      r1n:"محمد ولد أحمد", r1t:"زبون — نواكشوط",
+      r2:"«جهاز قياس السكر دقيق وسهل الاستخدام، وساعدوني في الاختيار قبل الشراء. أنصح بالتعامل معهم.»",
+      r2n:"فاطمة بنت سيدي", r2t:"زبونة — نواذيبو",
+      r3:"«نتعامل معهم كصيدلية منذ أكثر من سنة، التزام في المواعيد وأسعار الجملة ممتازة.»",
+      r3n:"صيدلية الشفاء", r3t:"مؤسسة شريكة"
+    },
+    footer: {
+      about:"Rim Medical — متجر متخصص في بيع وتوريد المعدات والمستلزمات الطبية للأفراد والمؤسسات، بجودة موثوقة وأسعار منافسة.",
+      contactTitle:"أرقام التواصل",
+      customerLbl:"واتساب الزبائن (أفراد)", b2bLbl:"واتساب المؤسسات (جملة)",
+      hoursTitle:"ساعات العمل",
+      days1:"السبت — الخميس", hours1:"9:00 ص — 10:00 م",
+      days2:"الجمعة", hours2:"4:00 م — 10:00 م",
+      rights:"جميع الحقوق محفوظة"
+    },
+    floatWaMsg:"السلام عليكم، لدي استفسار عن منتجات Rim Medical."
+  },
 
-async function hashText(text) {
-  if (window.crypto && crypto.subtle) {
-    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("rim-salt::" + text));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  fr: {
+    dir: "ltr", label: "Français",
+    brandTag: "Équipements médicaux",
+    nav: { home:"Accueil", categories:"Catégories", products:"Produits", b2b:"Institutions", reviews:"Avis clients", contact:"Contact" },
+    hero: {
+      badge:"Qualité médicale de confiance",
+      title1:"Tout votre équipement", title2:"médical au même endroit",
+      sub:"Lits médicalisés, fauteuils roulants, appareils de mesure, orthèses et matériel de soins à domicile — des produits authentiques à prix compétitifs, livrés rapidement chez vous.",
+      ctaProducts:"Voir les produits", ctaB2b:"Commandes en gros (B2B)",
+      reassure:"Conseil gratuit avant l'achat — nous vous accompagnons pas à pas pour prendre soin de ceux que vous aimez",
+      cardTitle:"Rim Medical", cardSub:"Votre partenaire de confiance en équipement médical pour particuliers et institutions",
+      cardStatus:"Disponibles maintenant sur WhatsApp", chip1:"Produits 100% authentiques", chip2:"Livraison rapide"
+    },
+    trust: {
+      t1:"Qualité garantie", t1s:"Produits contrôlés et conformes",
+      t2:"100% authentiques", t2s:"Fournisseurs agréés uniquement",
+      t3:"Livraison rapide", t3s:"Nous vous livrons où que vous soyez",
+      t4:"Support direct", t4s:"Conseil gratuit avant l'achat"
+    },
+    stats: { orders:"commandes livrées avec succès", clients:"clients satisfaits", partners:"institutions partenaires", years:"années d'expérience" },
+    cats: {
+      kicker:"Nos catégories", title:"Achetez par catégorie", sub:"Choisissez la catégorie adaptée à votre besoin et parcourez ses produits",
+      browse:"Voir les produits"
+    },
+    emotion: {
+      quote:"Parce que le confort de ceux que vous aimez commence par votre attention",
+      sub:"Derrière chaque commande, il y a une histoire d'attention — une mère qui veille sur son fils, un fils qui prend soin de ses parents. C'est un honneur d'en faire partie."
+    },
+    products: {
+      kicker:"Nos produits", title:"Des produits soigneusement sélectionnés", sub:"Commandez en deux étapes seulement : cliquez sur WhatsApp et envoyez le message pré-rempli",
+      all:"Tous", order:"Commander sur WhatsApp", askPrice:"Prix sur demande", currency:"MRU",
+      badgeBest:"Le plus demandé", badgeNew:"Nouveau", empty:"Aucun produit dans cette catégorie pour le moment",
+      waMsg:"Bonjour, je souhaite commander le produit suivant chez Rim Medical :"
+    },
+    b2b: {
+      tag:"Espace institutions — Prix de gros",
+      title:"Vous êtes une clinique, une pharmacie ou une association ? Profitez de nos prix de gros",
+      sub:"Nous fournissons des équipements médicaux en grandes quantités aux cliniques, hôpitaux, pharmacies et associations, avec devis personnalisés et factures officielles.",
+      p1:"Tarifs de gros préférentiels pour les grandes quantités",
+      p2:"Devis officiel sous 24 heures",
+      p3:"Approvisionnement continu et contrats-cadres",
+      p4:"Un conseiller dédié pour le suivi de vos commandes",
+      sideTitle:"Contactez le service institutions", sideSub:"Numéro réservé aux institutions — distinct du service particuliers",
+      cta:"WhatsApp Institutions",
+      waMsg:"Bonjour, nous sommes une institution et souhaitons un devis de gros chez Rim Medical."
+    },
+    why: {
+      kicker:"Pourquoi nous ?", title:"Pourquoi des centaines nous font confiance ?", sub:"Nous veillons à ce que votre expérience soit simple et fiable, du premier message à la livraison",
+      c1:"Qualité garantie", c1s:"Des marques fiables, contrôlées avant chaque livraison.",
+      c2:"Confiance établie", c2s:"Des centaines de clients et d'institutions fidèles.",
+      c3:"Réponse rapide", c3s:"Nous répondons rapidement et professionnellement sur WhatsApp.",
+      c4:"Conseil gratuit", c4s:"Nous vous aidons à choisir le produit adapté à votre patient.",
+      c5:"Prix compétitifs", c5s:"Des prix justes et transparents, avec offres sur quantités.",
+      c6:"Échange flexible", c6s:"Politique d'échange claire en cas de défaut de fabrication."
+    },
+    reviews: {
+      kicker:"Avis clients", title:"Que disent nos clients ?", sub:"Des avis authentiques de particuliers et d'institutions",
+      r1:"« J'ai acheté un lit médicalisé électrique pour mon père : livraison rapide et excellente qualité. Service après-vente remarquable. »",
+      r1n:"Mohamed Ould Ahmed", r1t:"Client — Nouakchott",
+      r2:"« Le glucomètre est précis et facile à utiliser, et ils m'ont bien conseillée avant l'achat. Je recommande. »",
+      r2n:"Fatima Mint Sidi", r2t:"Cliente — Nouadhibou",
+      r3:"« Nous travaillons avec eux comme pharmacie depuis plus d'un an : ponctualité et excellents prix de gros. »",
+      r3n:"Pharmacie Echifa", r3t:"Institution partenaire"
+    },
+    footer: {
+      about:"Rim Medical — boutique spécialisée dans la vente et la fourniture d'équipements médicaux pour particuliers et institutions, avec une qualité fiable et des prix compétitifs.",
+      contactTitle:"Nos numéros",
+      customerLbl:"WhatsApp Particuliers", b2bLbl:"WhatsApp Institutions (gros)",
+      hoursTitle:"Horaires d'ouverture",
+      days1:"Samedi — Jeudi", hours1:"9h00 — 22h00",
+      days2:"Vendredi", hours2:"16h00 — 22h00",
+      rights:"Tous droits réservés"
+    },
+    floatWaMsg:"Bonjour, j'ai une question sur les produits Rim Medical."
+  },
+
+  en: {
+    dir: "ltr", label: "English",
+    brandTag: "Medical Equipment",
+    nav: { home:"Home", categories:"Categories", products:"Products", b2b:"For Institutions", reviews:"Reviews", contact:"Contact" },
+    hero: {
+      badge:"Trusted medical quality",
+      title1:"All your medical", title2:"equipment in one place",
+      sub:"Hospital beds, wheelchairs, monitoring devices, braces and home-care supplies — authentic products at competitive prices, delivered fast to your door.",
+      ctaProducts:"Browse Products", ctaB2b:"Wholesale for Institutions",
+      reassure:"Free advice before you buy — we walk with you every step of caring for those you love",
+      cardTitle:"Rim Medical", cardSub:"Your trusted partner in medical equipment for homes and institutions",
+      cardStatus:"Available now on WhatsApp", chip1:"100% Authentic Products", chip2:"Fast Delivery"
+    },
+    trust: {
+      t1:"Quality Guarantee", t1s:"Inspected, compliant products",
+      t2:"100% Authentic", t2s:"Certified suppliers only",
+      t3:"Fast Delivery", t3s:"We deliver wherever you are",
+      t4:"Direct Support", t4s:"Free advice before you buy"
+    },
+    stats: { orders:"orders delivered successfully", clients:"happy customers", partners:"partner institutions", years:"years of experience" },
+    cats: {
+      kicker:"Our Categories", title:"Shop by Category", sub:"Pick the category that fits your needs and browse its products",
+      browse:"Browse products"
+    },
+    emotion: {
+      quote:"Because the comfort of those you love starts with your care",
+      sub:"Behind every order there is a story of care — a mother looking after her son, a son giving back to his parents. We are honored to be part of that story."
+    },
+    products: {
+      kicker:"Our Products", title:"Carefully Selected Products", sub:"Order in just two steps: tap the WhatsApp button and send the pre-filled message",
+      all:"All", order:"Order via WhatsApp", askPrice:"Price on request", currency:"MRU",
+      badgeBest:"Best Seller", badgeNew:"New", empty:"No products in this category yet",
+      waMsg:"Hello, I would like to order the following product from Rim Medical:"
+    },
+    b2b: {
+      tag:"Institutions — Wholesale Pricing",
+      title:"Are you a clinic, pharmacy or association? We offer special wholesale prices",
+      sub:"We supply medical equipment in bulk to clinics, hospitals, pharmacies and associations, with tailored quotations and official invoices.",
+      p1:"Preferential wholesale prices for bulk orders",
+      p2:"Official quotation within 24 hours",
+      p3:"Continuous supply and framework contracts",
+      p4:"A dedicated account manager for your orders",
+      sideTitle:"Contact the Institutions Desk", sideSub:"A dedicated number for institutions — separate from individual customers",
+      cta:"Institutions WhatsApp",
+      waMsg:"Hello, we are an institution and would like a wholesale quotation from Rim Medical."
+    },
+    why: {
+      kicker:"Why Us?", title:"Why do hundreds trust us?", sub:"We make your experience simple and reliable, from the first message until your order arrives",
+      c1:"Guaranteed Quality", c1s:"Trusted brands, inspected before every delivery.",
+      c2:"Proven Trust", c2s:"Hundreds of repeat customers and institutions.",
+      c3:"Fast Response", c3s:"We reply quickly and professionally on WhatsApp.",
+      c4:"Free Consultation", c4s:"We help you choose the right product for your patient.",
+      c5:"Competitive Prices", c5s:"Fair, transparent pricing with bulk offers.",
+      c6:"Flexible Exchange", c6s:"A clear exchange policy for manufacturing defects."
+    },
+    reviews: {
+      kicker:"Customer Reviews", title:"What do our customers say?", sub:"Genuine reviews from individuals and institutions",
+      r1:"“I bought an electric hospital bed for my father — fast delivery and excellent quality. Outstanding after-sales service.”",
+      r1n:"Mohamed Ould Ahmed", r1t:"Customer — Nouakchott",
+      r2:"“The glucose meter is accurate and easy to use, and they advised me well before buying. Highly recommended.”",
+      r2n:"Fatima Mint Sidi", r2t:"Customer — Nouadhibou",
+      r3:"“We've worked with them as a pharmacy for over a year — always on time with excellent wholesale prices.”",
+      r3n:"Echifa Pharmacy", r3t:"Partner Institution"
+    },
+    footer: {
+      about:"Rim Medical — a store specialized in selling and supplying medical equipment for individuals and institutions, with reliable quality and competitive prices.",
+      contactTitle:"Contact Numbers",
+      customerLbl:"Customers WhatsApp", b2bLbl:"Institutions WhatsApp (wholesale)",
+      hoursTitle:"Working Hours",
+      days1:"Saturday — Thursday", hours1:"9:00 AM — 10:00 PM",
+      days2:"Friday", hours2:"4:00 PM — 10:00 PM",
+      rights:"All rights reserved"
+    },
+    floatWaMsg:"Hello, I have a question about Rim Medical products."
   }
-  /* بديل بسيط إذا لم تتوفر crypto.subtle (متصفحات قديمة جداً) */
-  let h = 5381;
-  const s = "rim-salt::" + text;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
-  return "djb2-" + h.toString(16);
-}
+};
 
-async function getStoredHash() {
-  return localStorage.getItem(PASS_KEY) || await hashText(DEFAULT_PASS);
-}
+/* =========================================================
+   الحالة العامة
+   ========================================================= */
+const LANG_KEY = "rim_medical_lang";
+let DATA = RimStore.getData();
+let currentLang = localStorage.getItem(LANG_KEY) || "ar";
+let currentFilter = "all";
 
 const $ = (s, ctx) => (ctx || document).querySelector(s);
 const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
+const t = (path) => path.split(".").reduce((o, k) => (o || {})[k], I18N[currentLang]) ?? "";
 
-const loginView = $("#loginView");
-const adminView = $("#adminView");
-
-function showAdmin() {
-  loginView.style.display = "none";
-  adminView.style.display = "block";
-  loadAll();
-}
-
-$("#loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const entered = await hashText($("#loginPass").value);
-  if (entered === await getStoredHash()) {
-    sessionStorage.setItem(SESSION_KEY, "1");
-    showAdmin();
-  } else {
-    $("#loginError").style.display = "block";
-    $("#loginPass").value = "";
-  }
-});
-
-$("#logoutBtn").addEventListener("click", () => {
-  sessionStorage.removeItem(SESSION_KEY);
-  location.reload();
-});
-
-if (sessionStorage.getItem(SESSION_KEY) === "1") showAdmin();
-
-/* =========================================================
-   أدوات عامة
-   ========================================================= */
-let DATA = RimStore.getData();
-
-const CAT_LABELS = {
-  mobility:"معدات الحركة والتنقل", monitoring:"أجهزة القياس والمراقبة",
-  hearing:"المستلزمات السمعية", orthopedic:"الدعامات والتقويم",
-  homecare:"مستلزمات العناية المنزلية", beds:"أسرّة ومعدات طبية ثقيلة"
+/* الفئات تأتي من البيانات (قابلة للإدارة من لوحة التحكم) */
+const getCategories = () => DATA.categories || [];
+const catName = (id) => {
+  const c = getCategories().find(c => c.id === id);
+  return c ? (c.name[currentLang] || c.name.ar) : "";
 };
-
-let toastTimer;
-function toast(msg, type) {
-  const el = $("#toast");
-  el.textContent = msg;
-  el.className = type || "";
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove("show"), 3000);
-}
-
-function persist() {
-  if (RimStore.saveData(DATA)) {
-    toast("✅ تم الحفظ في المتصفح — لا تنسَ «النشر» ليراه الزوار", "ok");
-  } else {
-    toast("تعذّر الحفظ — قد تكون مساحة التخزين ممتلئة (صور كبيرة؟)", "err");
-  }
-}
-
-/* ضغط الصور إلى حجم معقول قبل الحفظ */
-function compressImage(file, maxSize, cb) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      cb(canvas.toDataURL("image/jpeg", 0.82));
-    };
-    img.onerror = () => toast("تعذّر قراءة الصورة", "err");
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-}
+/* صور المنتج: يدعم صوراً متعددة مع توافق مع الصيغة القديمة (صورة واحدة) */
+const productImages = (p) => (Array.isArray(p.images) && p.images.length)
+  ? p.images
+  : (p.image ? [p.image] : []);
 
 /* =========================================================
-   التبويبات
+   شاشة اختيار اللغة (أول زيارة فقط)
    ========================================================= */
-$$(".tab-btn").forEach(btn => {
+const gate = $("#langGate");
+if (localStorage.getItem(LANG_KEY)) {
+  gate.classList.add("hidden");
+}
+$$(".gate-lang").forEach(btn => {
   btn.addEventListener("click", () => {
-    $$(".tab-btn").forEach(b => b.classList.remove("active"));
-    $$(".tab-panel").forEach(p => p.classList.remove("active"));
-    btn.classList.add("active");
-    $("#tab-" + btn.dataset.tab).classList.add("active");
+    setLang(btn.dataset.lang);
+    gate.classList.add("hidden");
   });
 });
 
 /* =========================================================
-   المنتجات
+   تطبيق اللغة على الصفحة
    ========================================================= */
+function setLang(lang) {
+  if (!I18N[lang]) lang = "ar";
+  currentLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = I18N[lang].dir;
+  $("#langCurrent").textContent = I18N[lang].label;
+  $$(".lang-menu button").forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+
+  $$("[data-i18n]").forEach(el => {
+    const val = t(el.dataset.i18n);
+    if (val) el.textContent = val;
+  });
+
+  renderCategories();
+  renderFilters();
+  renderProducts();
+  applySettings();
+}
+
+/* =========================================================
+   تطبيق الإعدادات (الأرقام + الشعار + الإحصائيات)
+   ========================================================= */
+function applySettings() {
+  const s = DATA.settings;
+
+  /* الشعار */
+  if (s.logo) {
+    ["brandLogo", "footerLogo", "gateLogo"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<img src="' + s.logo + '" alt="Rim Medical">';
+    });
+  }
+
+  /* روابط واتساب */
+  $("#floatWa").href = RimStore.waLink(s.customerWhatsapp, t("floatWaMsg"));
+  $("#b2bWaBtn").href = RimStore.waLink(s.institutionalWhatsapp, t("b2b.waMsg"));
+  $("#b2bNumber").textContent = "+" + s.institutionalWhatsapp;
+
+  $("#footCustomerWa").href = RimStore.waLink(s.customerWhatsapp, t("floatWaMsg"));
+  $("#footCustomerNum").textContent = "+" + s.customerWhatsapp;
+  $("#footB2bWa").href = RimStore.waLink(s.institutionalWhatsapp, t("b2b.waMsg"));
+  $("#footB2bNum").textContent = "+" + s.institutionalWhatsapp;
+
+  /* روابط السوشيال ميديا */
+  const socials = [
+    { key:"facebook",  icon:"📘" },
+    { key:"instagram", icon:"📸" },
+    { key:"tiktok",    icon:"🎵" }
+  ];
+  const wrap = $("#socialLinks");
+  wrap.innerHTML = "";
+  const waAll = document.createElement("a");
+  waAll.href = RimStore.waLink(s.customerWhatsapp, t("floatWaMsg"));
+  waAll.target = "_blank"; waAll.rel = "noopener"; waAll.textContent = "💬";
+  wrap.appendChild(waAll);
+  socials.forEach(({ key, icon }) => {
+    if (s.social && s.social[key]) {
+      const a = document.createElement("a");
+      a.href = s.social[key]; a.target = "_blank"; a.rel = "noopener"; a.textContent = icon;
+      wrap.appendChild(a);
+    }
+  });
+}
+
+/* =========================================================
+   عرض التصنيفات
+   ========================================================= */
+function renderCategories() {
+  const grid = $("#catsGrid");
+  grid.innerHTML = "";
+  getCategories().forEach((cat, i) => {
+    const card = document.createElement("div");
+    card.className = "cat-card reveal" + (i % 3 ? " reveal-d" + (i % 3) : "");
+    card.innerHTML =
+      '<span class="c-ico">' + (cat.icon || "🩺") + '</span>' +
+      '<h3></h3><p></p>' +
+      '<span class="c-link">' + t("cats.browse") + ' <span>' + (I18N[currentLang].dir === "rtl" ? "←" : "→") + '</span></span>';
+    card.querySelector("h3").textContent = cat.name[currentLang] || cat.name.ar;
+    card.querySelector("p").textContent = (cat.desc && (cat.desc[currentLang] || cat.desc.ar)) || "";
+    card.addEventListener("click", () => {
+      currentFilter = cat.id;
+      renderFilters();
+      renderProducts();
+      $("#products").scrollIntoView({ behavior: "smooth" });
+    });
+    grid.appendChild(card);
+  });
+  observeReveals();
+}
+
+/* =========================================================
+   فلاتر المنتجات
+   ========================================================= */
+function renderFilters() {
+  const bar = $("#filterBar");
+  bar.innerHTML = "";
+  const mk = (id, label) => {
+    const b = document.createElement("button");
+    b.className = "filter-chip" + (currentFilter === id ? " active" : "");
+    b.textContent = label;
+    b.addEventListener("click", () => { currentFilter = id; renderFilters(); renderProducts(); });
+    bar.appendChild(b);
+  };
+  mk("all", t("products.all"));
+  getCategories().forEach(c => mk(c.id, c.name[currentLang] || c.name.ar));
+}
+
+/* =========================================================
+   عرض المنتجات
+   ========================================================= */
+function formatPrice(p) {
+  if (p === null || p === undefined || p === "") {
+    return '<span class="p-price ask">' + t("products.askPrice") + '</span>';
+  }
+  return '<span class="p-price">' + Number(p).toLocaleString("en-US") +
+         ' <small>' + t("products.currency") + '</small></span>';
+}
+
+const WA_SVG = '<svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2.9C8.8 2.9 3 8.7 3 15.9c0 2.3.6 4.5 1.7 6.5L3 29.1l6.9-1.8c1.9 1 4 1.6 6.1 1.6 7.2 0 13-5.8 13-13S23.2 2.9 16 2.9zm5.9 17.7c-.3.8-1.6 1.4-2.2 1.5-.6.1-1.3.1-2.1-.1-.5-.2-1.1-.4-1.9-.7-3.2-1.4-5.3-4.7-5.5-4.9-.1-.3-1.3-1.8-1.3-3.4s.8-2.4 1.1-2.7c.3-.3.7-.4.9-.4h.6c.2.1.4 0 .7.6.3.6.9 2.2 1 2.4.1.2.1.4 0 .6-.1.2-.1.3-.3.5-.2.1-.4.4-.5.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.8 2.2 1.2 1.1 2.3 1.4 2.6 1.6.3.1.4.1.6-.1.1-.2.7-.9.9-1.2.2-.4.4-.3.7-.2.3.1 1.9.8 2.2 1 .3.1.5.2.6.4.1.1.1.7-.2 1.5z"/></svg>';
+
 function renderProducts() {
-  const list = $("#productsList");
-  list.innerHTML = "";
-  if (!DATA.products.length) {
-    list.innerHTML = '<div class="empty-msg">لا توجد منتجات بعد — أضف أول منتج من الزر أعلاه</div>';
+  const grid = $("#productsGrid");
+  grid.innerHTML = "";
+  const list = DATA.products.filter(p => currentFilter === "all" || p.category === currentFilter);
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="no-products">' + t("products.empty") + '</div>';
     return;
   }
-  DATA.products.forEach(p => {
-    const row = document.createElement("div");
-    row.className = "p-row";
-    const badge = p.badge === "best" ? "⭐ الأكثر طلباً" : p.badge === "new" ? "🆕 جديد" : "";
-    row.innerHTML =
-      '<div class="p-thumb">' + (p.image ? '<img src="' + p.image + '" alt="">' : (p.icon || "🩺")) + '</div>' +
-      '<div class="p-info"><h3></h3><div class="meta">' +
-        '<span>' + (CAT_LABELS[p.category] || p.category) + '</span>' +
-        '<span>' + (p.price ? Number(p.price).toLocaleString("en-US") + " MRU" : "السعر عند الطلب") + '</span>' +
-        (badge ? '<span class="badge-tag">' + badge + '</span>' : "") +
-      '</div></div>' +
-      '<div class="p-actions">' +
-        '<button class="btn btn-ghost btn-sm edit-btn">✏️ تعديل</button>' +
-        '<button class="btn btn-danger btn-sm del-btn">🗑️ حذف</button>' +
+
+  list.forEach((p, i) => {
+    const name = p.name[currentLang] || p.name.ar;
+    const desc = p.desc[currentLang] || p.desc.ar;
+    const imgs = productImages(p);
+    const waMsg = t("products.waMsg") + "\n\n▪️ " + name +
+      (p.price ? "\n▪️ " + Number(p.price).toLocaleString("en-US") + " " + t("products.currency") : "");
+    const waHref = RimStore.waLink(DATA.settings.customerWhatsapp, waMsg);
+
+    const card = document.createElement("div");
+    card.className = "product-card reveal" + (i % 3 ? " reveal-d" + (i % 3) : "");
+    card.innerHTML =
+      '<div class="p-media">' +
+        (p.badge ? '<span class="p-badge ' + p.badge + '">' +
+          (p.badge === "best" ? t("products.badgeBest") : t("products.badgeNew")) + '</span>' : "") +
+        (imgs.length ? '<img src="' + imgs[0] + '" alt="" loading="lazy">'
+                     : '<span class="p-emoji">' + (p.icon || "🩺") + '</span>') +
+        (imgs.length > 1 ? '<span class="p-imgcount">📷 ' + imgs.length + '</span>' : "") +
+        '<span class="p-cat-tag">' + catName(p.category) + '</span>' +
+      '</div>' +
+      '<div class="p-body">' +
+        '<h3></h3>' +
+        '<p class="p-desc"></p>' +
+        '<div class="p-foot">' + formatPrice(p.price) +
+          '<a class="btn-wa" target="_blank" rel="noopener">' + WA_SVG +
+            '<span>' + t("products.order") + '</span></a>' +
+        '</div>' +
       '</div>';
-    row.querySelector("h3").textContent = p.name.ar;
-    row.querySelector(".edit-btn").addEventListener("click", () => openModal(p));
-    row.querySelector(".del-btn").addEventListener("click", () => {
-      if (confirm('هل أنت متأكد من حذف «' + p.name.ar + '»؟')) {
-        DATA.products = DATA.products.filter(x => x.id !== p.id);
-        persist();
-        renderProducts();
-      }
+    card.querySelector("h3").textContent = name;
+    card.querySelector(".p-desc").textContent = desc;
+    card.querySelector(".btn-wa").href = waHref;
+    card.querySelector(".p-media").addEventListener("click", (e) => {
+      if (e.target.closest(".btn-wa")) return;
+      openLightbox(p, name, desc);
     });
-    list.appendChild(row);
+    grid.appendChild(card);
   });
+  observeReveals();
 }
-
-/* --- نافذة المنتج --- */
-const modal = $("#productModal");
-let modalImage = "";
-
-function openModal(p) {
-  $("#modalTitle").textContent = p ? "تعديل المنتج" : "إضافة منتج جديد";
-  $("#pId").value = p ? p.id : "";
-  $("#pNameAr").value = p ? p.name.ar : "";
-  $("#pNameFr").value = p ? p.name.fr : "";
-  $("#pNameEn").value = p ? p.name.en : "";
-  $("#pDescAr").value = p ? p.desc.ar : "";
-  $("#pDescFr").value = p ? p.desc.fr : "";
-  $("#pDescEn").value = p ? p.desc.en : "";
-  $("#pCategory").value = p ? p.category : "mobility";
-  $("#pBadge").value = p && p.badge ? p.badge : "";
-  $("#pPrice").value = p && p.price != null ? p.price : "";
-  $("#pIcon").value = p ? (p.icon || "") : "";
-  $("#pImageInput").value = "";
-  modalImage = p ? (p.image || "") : "";
-  updateImagePreview();
-  modal.classList.add("open");
-}
-
-function updateImagePreview() {
-  $("#pImagePreview").innerHTML = modalImage
-    ? '<img src="' + modalImage + '" alt="">'
-    : ($("#pIcon").value || "🩺");
-}
-
-$("#pIcon").addEventListener("input", updateImagePreview);
-$("#pImageInput").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  compressImage(file, 900, (dataUrl) => { modalImage = dataUrl; updateImagePreview(); });
-});
-
-$("#addProductBtn").addEventListener("click", () => openModal(null));
-$("#cancelModalBtn").addEventListener("click", () => modal.classList.remove("open"));
-modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
-
-$("#productForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const id = $("#pId").value || "p-" + Date.now();
-  const priceRaw = $("#pPrice").value.trim();
-  const product = {
-    id,
-    category: $("#pCategory").value,
-    badge: $("#pBadge").value || null,
-    price: priceRaw === "" ? null : Number(priceRaw),
-    icon: $("#pIcon").value.trim() || "🩺",
-    image: modalImage,
-    name: { ar: $("#pNameAr").value.trim(), fr: $("#pNameFr").value.trim(), en: $("#pNameEn").value.trim() },
-    desc: { ar: $("#pDescAr").value.trim(), fr: $("#pDescFr").value.trim(), en: $("#pDescEn").value.trim() }
-  };
-  const idx = DATA.products.findIndex(x => x.id === id);
-  if (idx >= 0) DATA.products[idx] = product;
-  else DATA.products.unshift(product);
-  persist();
-  renderProducts();
-  modal.classList.remove("open");
-});
 
 /* =========================================================
-   الإعدادات (الأرقام + الإحصائيات + السوشيال)
+   Lightbox لصور المنتجات
    ========================================================= */
-function loadSettings() {
-  const s = DATA.settings;
-  $("#setCustomerWa").value = s.customerWhatsapp || "";
-  $("#setB2bWa").value = s.institutionalWhatsapp || "";
-  $("#setOrders").value = s.stats.ordersDelivered;
-  $("#setClients").value = s.stats.happyClients;
-  $("#setPartners").value = s.stats.partners;
-  $("#setYears").value = s.stats.yearsExperience;
-  $("#setFacebook").value = (s.social && s.social.facebook) || "";
-  $("#setInstagram").value = (s.social && s.social.instagram) || "";
-  $("#setTiktok").value = (s.social && s.social.tiktok) || "";
-}
-
-$("#saveSettingsBtn").addEventListener("click", () => {
-  const cust = $("#setCustomerWa").value.replace(/[^0-9]/g, "");
-  const b2b = $("#setB2bWa").value.replace(/[^0-9]/g, "");
-  if (!cust || !b2b) { toast("يرجى إدخال الرقمين بشكل صحيح", "err"); return; }
-  DATA.settings.customerWhatsapp = cust;
-  DATA.settings.institutionalWhatsapp = b2b;
-  DATA.settings.stats.ordersDelivered = Number($("#setOrders").value) || 0;
-  DATA.settings.stats.happyClients = Number($("#setClients").value) || 0;
-  DATA.settings.stats.partners = Number($("#setPartners").value) || 0;
-  DATA.settings.stats.yearsExperience = Number($("#setYears").value) || 0;
-  DATA.settings.social = {
-    facebook: $("#setFacebook").value.trim(),
-    instagram: $("#setInstagram").value.trim(),
-    tiktok: $("#setTiktok").value.trim()
+const lightbox = $("#lightbox");
+function openLightbox(p, name, desc) {
+  const imgs = productImages(p);
+  const show = (idx) => {
+    $("#lbMedia").innerHTML = imgs.length
+      ? '<img src="' + imgs[idx] + '" alt="">'
+      : '<span class="p-emoji">' + (p.icon || "🩺") + '</span>';
+    $$(".lb-thumb").forEach((th, i) => th.classList.toggle("active", i === idx));
   };
-  persist();
-});
-
-$("#changePassBtn").addEventListener("click", async () => {
-  const p1 = $("#newPass").value, p2 = $("#newPass2").value;
-  if (p1.length < 6) { toast("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "err"); return; }
-  if (p1 !== p2) { toast("كلمتا المرور غير متطابقتين", "err"); return; }
-  localStorage.setItem(PASS_KEY, await hashText(p1));
-  $("#newPass").value = ""; $("#newPass2").value = "";
-  toast("✅ تم تغيير كلمة المرور", "ok");
-});
-
-/* =========================================================
-   الشعار
-   ========================================================= */
-let pendingLogo = null;
-
-function loadLogo() {
-  const box = $("#logoPreview");
-  const tb = $("#tbLogo");
-  if (DATA.settings.logo) {
-    box.innerHTML = '<img src="' + DATA.settings.logo + '" alt="">';
-    tb.innerHTML = '<img src="' + DATA.settings.logo + '" alt="">';
+  const thumbs = $("#lbThumbs");
+  thumbs.innerHTML = "";
+  if (imgs.length > 1) {
+    imgs.forEach((src, i) => {
+      const b = document.createElement("button");
+      b.className = "lb-thumb" + (i === 0 ? " active" : "");
+      b.innerHTML = '<img src="' + src + '" alt="">';
+      b.addEventListener("click", () => show(i));
+      thumbs.appendChild(b);
+    });
   }
+  show(0);
+  $("#lbTitle").textContent = name;
+  $("#lbDesc").textContent = desc;
+  lightbox.classList.add("open");
+  document.body.style.overflow = "hidden";
 }
-
-$("#logoInput").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  compressImage(file, 400, (dataUrl) => {
-    pendingLogo = dataUrl;
-    $("#logoPreview").innerHTML = '<img src="' + dataUrl + '" alt="">';
-  });
-});
-
-$("#saveLogoBtn").addEventListener("click", () => {
-  if (!pendingLogo) { toast("اختر صورة أولاً", "err"); return; }
-  DATA.settings.logo = pendingLogo;
-  persist();
-  loadLogo();
-});
-
-$("#removeLogoBtn").addEventListener("click", () => {
-  DATA.settings.logo = "";
-  pendingLogo = null;
-  $("#logoInput").value = "";
-  $("#logoPreview").innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>';
-  $("#tbLogo").innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>';
-  persist();
-});
+function closeLightbox() {
+  lightbox.classList.remove("open");
+  document.body.style.overflow = "";
+}
+$("#lbClose").addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
 
 /* =========================================================
-   النشر / النسخ الاحتياطي / الاستعادة
+   الترويسة: تبديل اللغة + القائمة الجانبية + التمرير
    ========================================================= */
-function download(filename, content, mime) {
-  const blob = new Blob([content], { type: mime || "text/plain;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-$("#exportBtn").addEventListener("click", () => {
-  download("data.js", RimStore.exportDataFile(), "text/javascript;charset=utf-8");
-  toast("✅ تم التنزيل — ارفعه مكان assets/data.js في موقعك", "ok");
+const langSwitch = $("#langSwitch");
+$("#langBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  langSwitch.classList.toggle("open");
+});
+document.addEventListener("click", () => langSwitch.classList.remove("open"));
+$$(".lang-menu button").forEach(b => {
+  b.addEventListener("click", () => { setLang(b.dataset.lang); langSwitch.classList.remove("open"); });
 });
 
-$("#backupBtn").addEventListener("click", () => {
-  download("rim-medical-backup-" + new Date().toISOString().slice(0, 10) + ".json",
-    JSON.stringify(DATA, null, 2), "application/json");
+const mainNav = $("#mainNav");
+$("#burger").addEventListener("click", (e) => { e.stopPropagation(); mainNav.classList.toggle("open"); });
+$$("a", mainNav).forEach(a => a.addEventListener("click", () => mainNav.classList.remove("open")));
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("#mainNav") && !e.target.closest("#burger")) mainNav.classList.remove("open");
 });
 
-$("#importInput").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const parsed = JSON.parse(reader.result);
-      if (!parsed.settings || !Array.isArray(parsed.products)) throw new Error("bad");
-      DATA = parsed;
-      persist();
-      loadAll();
-      toast("✅ تمت الاستعادة بنجاح", "ok");
-    } catch (err) {
-      toast("الملف غير صالح", "err");
+const header = $("#header");
+window.addEventListener("scroll", () => {
+  header.classList.toggle("scrolled", window.scrollY > 40);
+}, { passive: true });
+
+/* =========================================================
+   حركات التمرير (Intersection Observer) + عدادات الأرقام
+   ========================================================= */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add("visible");
+      revealObserver.unobserve(en.target);
     }
-  };
-  reader.readAsText(file);
-  e.target.value = "";
-});
+  });
+}, { threshold: 0.12 });
 
-$("#resetBtn").addEventListener("click", () => {
-  if (!confirm("سيتم حذف كل التعديلات المحلية والعودة لبيانات ملف data.js — متأكد؟")) return;
-  RimStore.resetData();
-  DATA = RimStore.getData();
-  loadAll();
-  toast("تمت إعادة التعيين", "ok");
-});
+function observeReveals() {
+  $$(".reveal:not(.visible)").forEach(el => revealObserver.observe(el));
+}
+
+function animateCounter(el, target) {
+  const duration = 1600;
+  const start = performance.now();
+  function tick(now) {
+    const k = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(target * eased).toLocaleString("en-US");
+    if (k < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    $$(".counter", en.target).forEach(c => {
+      animateCounter(c, Number(DATA.settings.stats[c.dataset.key]) || 0);
+    });
+    statsObserver.unobserve(en.target);
+  });
+}, { threshold: 0.4 });
+statsObserver.observe($("#stats"));
 
 /* =========================================================
-   تحميل كل شيء
+   التشغيل
    ========================================================= */
-function loadAll() {
-  DATA = RimStore.getData();
-  renderProducts();
-  loadSettings();
-  loadLogo();
-}
+$("#year").textContent = new Date().getFullYear();
+setLang(currentLang);
+observeReveals();
+
+/* تحديث فوري إذا عُدّلت البيانات من لوحة التحكم في نافذة أخرى */
+window.addEventListener("storage", (e) => {
+  if (e.key === RimStore.STORAGE_KEY) {
+    DATA = RimStore.getData();
+    setLang(currentLang);
+  }
+});
 </script>
 </body>
 </html>

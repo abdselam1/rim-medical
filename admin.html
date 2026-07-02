@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم Rim Medical</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230a2647'/%3E%3Cpath d='M12 5v14M5 12h14' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a2647;--navy-2:#123b6d;--teal:#0fb9b1;--teal-dark:#0a8f89;
+  --gold:#c9a24b;--bg:#f2f6fb;--card:#fff;--ink:#13253d;--muted:#5d7290;
+  --line:#e3ebf4;--danger:#d64545;--ok:#1f9d61;
+  --shadow:0 10px 30px rgba(10,38,71,.1);--radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{
+  font-family:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--line);
+  border-radius:12px;font-size:.95rem;background:#fff;color:var(--ink);
+  transition:border-color .25s,box-shadow .25s;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,185,177,.15)}
+textarea{resize:vertical;min-height:74px}
+label{display:block;font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.hint{font-size:.78rem;color:var(--muted);margin-top:4px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 22px;border-radius:12px;font-weight:700;font-size:.92rem;
+  transition:transform .25s,box-shadow .25s,opacity .25s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,#19d3ca,var(--teal-dark));color:#fff;box-shadow:0 8px 20px rgba(15,185,177,.3)}
+.btn-navy{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff}
+.btn-ghost{background:#eef3f9;color:var(--navy)}
+.btn-danger{background:#fdecec;color:var(--danger)}
+.btn-sm{padding:7px 14px;font-size:.82rem;border-radius:10px}
+
+/* ---- شاشة الدخول ---- */
+#loginView{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:
+    radial-gradient(800px 500px at 85% -10%,rgba(15,185,177,.25),transparent 60%),
+    linear-gradient(150deg,#081e3a,#0a2647 55%,#123b6d);
+}
+.login-card{
+  width:min(400px,100%);background:#fff;border-radius:22px;padding:38px 32px;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);text-align:center;
+}
+.login-logo{
+  width:70px;height:70px;margin:0 auto 16px;border-radius:20px;
+  background:linear-gradient(145deg,var(--teal),var(--teal-dark));
+  display:flex;align-items:center;justify-content:center;
+}
+.login-logo svg{width:36px;height:36px}
+.login-card h1{font-size:1.3rem;color:var(--navy);margin-bottom:4px}
+.login-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:26px}
+.login-card form{text-align:start}
+#loginError{color:var(--danger);font-size:.82rem;margin-top:10px;display:none;text-align:center}
+
+/* ---- الهيكل العام ---- */
+#adminView{display:none}
+.topbar{
+  background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;
+  padding:14px 0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);
+}
+.topbar .wrap{width:min(1100px,94%);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.topbar .tb-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
+.topbar .tb-logo{width:38px;height:38px;border-radius:11px;overflow:hidden;background:linear-gradient(145deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center}
+.topbar .tb-logo img{width:100%;height:100%;object-fit:cover}
+.topbar .tb-logo svg{width:20px;height:20px}
+.topbar .tb-actions{display:flex;gap:8px;flex-wrap:wrap}
+.topbar .btn{padding:8px 16px;font-size:.83rem}
+.topbar .btn-light{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
+main{width:min(1100px,94%);margin:26px auto 60px}
+
+/* ---- التبويبات ---- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tab-btn{
+  padding:10px 22px;border-radius:12px;font-weight:700;font-size:.9rem;
+  background:#fff;color:var(--muted);border:1.5px solid var(--line);transition:all .25s;
+}
+.tab-btn.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-color:transparent}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 3px 12px rgba(10,38,71,.05);margin-bottom:20px}
+.card h2{font-size:1.1rem;color:var(--navy);margin-bottom:6px}
+.card .card-sub{font-size:.85rem;color:var(--muted);margin-bottom:20px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.field{margin-bottom:16px}
+
+/* ---- جدول المنتجات ---- */
+.products-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.p-list{display:grid;gap:12px}
+.p-row{
+  display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:14px 18px;transition:box-shadow .25s;
+}
+.p-row:hover{box-shadow:var(--shadow)}
+.p-thumb{
+  width:56px;height:56px;border-radius:12px;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(145deg,#eef4fa,#dde9f5);
+  display:flex;align-items:center;justify-content:center;font-size:1.7rem;
+}
+.p-thumb img{width:100%;height:100%;object-fit:cover}
+.p-info{flex:1;min-width:0}
+.p-info h3{font-size:.98rem;color:var(--navy)}
+.p-info .meta{font-size:.78rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.p-info .meta .badge-tag{color:var(--gold);font-weight:700}
+.p-actions{display:flex;gap:8px;flex-shrink:0}
+.empty-msg{text-align:center;color:var(--muted);padding:36px 0}
+
+/* ---- النافذة المنبثقة (Modal) ---- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;background:rgba(6,20,38,.6);backdrop-filter:blur(4px);
+  display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  width:min(680px,100%);background:#fff;border-radius:20px;padding:30px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);animation:fadeIn .3s ease;
+}
+.modal h2{color:var(--navy);font-size:1.15rem;margin-bottom:20px}
+.lang-fields{border:1.5px dashed var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.lang-fields legend,.lang-fields .lf-title{font-size:.85rem;font-weight:800;color:var(--teal-dark);padding:0 8px;margin-bottom:10px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+.img-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.img-item{
+  position:relative;width:96px;height:96px;border-radius:14px;overflow:hidden;
+  border:2px solid var(--line);background:linear-gradient(145deg,#eef4fa,#dde9f5);
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--muted);
+}
+.img-item img{width:100%;height:100%;object-fit:cover}
+.img-item.main{border-color:var(--gold)}
+.img-item .im-remove,.img-item .im-star{
+  position:absolute;top:4px;width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.72rem;
+  background:rgba(6,20,38,.7);color:#fff;transition:background .2s;
+}
+.img-item .im-remove{inset-inline-end:4px}
+.img-item .im-star{inset-inline-start:4px}
+.img-item .im-remove:hover{background:var(--danger)}
+.img-item .im-star:hover{background:var(--gold)}
+.img-item .main-tag{
+  position:absolute;bottom:0;inset-inline:0;background:rgba(201,162,75,.92);
+  color:#fff;font-size:.62rem;font-weight:800;text-align:center;padding:2px 0;
+}
+
+/* ---- الشعار ---- */
+.logo-preview{
+  width:140px;height:140px;border-radius:22px;border:1.5px solid var(--line);overflow:hidden;
+  background:linear-gradient(145deg,var(--teal),var(--teal-dark));
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+}
+.logo-preview img{width:100%;height:100%;object-fit:cover}
+.logo-preview svg{width:56px;height:56px}
+
+/* ---- إشعار ---- */
+#toast{
+  position:fixed;bottom:26px;inset-inline-start:50%;transform:translateX(50%) translateY(80px);
+  background:var(--navy);color:#fff;padding:13px 26px;border-radius:14px;font-weight:700;
+  font-size:.9rem;box-shadow:var(--shadow);z-index:400;opacity:0;transition:all .4s cubic-bezier(.22,.61,.36,1);
+  max-width:90vw;text-align:center;
+}
+html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
+#toast.show{opacity:1;transform:translateX(50%) translateY(0)}
+#toast.ok{background:var(--ok)}
+#toast.err{background:var(--danger)}
+.note{
+  background:#fff8e8;border:1px solid #f0dfae;border-radius:12px;
+  padding:14px 18px;font-size:.85rem;color:#7a5c14;margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+
+<!-- ============ شاشة الدخول ============ -->
+<div id="loginView">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+    </div>
+    <h1>لوحة تحكم Rim Medical</h1>
+    <div class="sub">منطقة خاصة بالإدارة فقط</div>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginPass">كلمة المرور</label>
+        <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%">دخول</button>
+      <div id="loginError">كلمة المرور غير صحيحة</div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ لوحة التحكم ============ -->
+<div id="adminView">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="tb-brand">
+        <span class="tb-logo" id="tbLogo">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+        </span>
+        لوحة تحكم Rim Medical
+      </div>
+      <div class="tb-actions">
+        <a href="index.html" target="_blank" class="btn btn-light">👁️ معاينة الموقع</a>
+        <button class="btn btn-light" id="logoutBtn">خروج 🚪</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="products">🛒 المنتجات</button>
+      <button class="tab-btn" data-tab="categories">🗂️ الفئات</button>
+      <button class="tab-btn" data-tab="settings">📱 أرقام التواصل</button>
+      <button class="tab-btn" data-tab="logo">🖼️ الشعار</button>
+      <button class="tab-btn" data-tab="publish">🚀 النشر والنسخ الاحتياطي</button>
+    </div>
+
+    <!-- ===== تبويب المنتجات ===== -->
+    <div class="tab-panel active" id="tab-products">
+      <div class="card">
+        <div class="products-toolbar">
+          <div>
+            <h2>إدارة المنتجات</h2>
+            <div class="card-sub" style="margin:0">إضافة وتعديل وحذف المنتجات بالثلاث لغات</div>
+          </div>
+          <button class="btn btn-primary" id="addProductBtn">＋ إضافة منتج جديد</button>
+        </div>
+        <div class="p-list" id="productsList"></div>
+      </div>
+    </div>
+
+    <!-- ===== تبويب الفئات ===== -->
+    <div class="tab-panel" id="tab-categories">
+      <div class="card">
+        <div class="products-toolbar">
+          <div>
+            <h2>إدارة الفئات (التصنيفات)</h2>
+            <div class="card-sub" style="margin:0">أضف فئات جديدة أو عدّل الحالية — تظهر مباشرة في الموقع والفلاتر</div>
+          </div>
+          <button class="btn btn-primary" id="addCatBtn">＋ إضافة فئة جديدة</button>
+        </div>
+        <div class="p-list" id="catsList"></div>
+      </div>
+    </div>
+
+    <!-- ===== تبويب أرقام التواصل ===== -->
+    <div class="tab-panel" id="tab-settings">
+      <div class="card">
+        <h2>أرقام واتساب</h2>
+        <div class="card-sub">رقمان منفصلان تماماً: الأول للزبائن الأفراد والثاني للمؤسسات. اكتب الرقم بالصيغة الدولية بدون + أو أصفار (مثال: 22228646987)</div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="setCustomerWa">👤 رقم واتساب الزبائن (أفراد)</label>
+            <input type="text" id="setCustomerWa" dir="ltr" placeholder="22228646987">
+            <div class="hint">يُستخدم في أزرار طلب المنتجات والزر العائم</div>
+          </div>
+          <div class="field">
+            <label for="setB2bWa">🏢 رقم واتساب المؤسسات (جملة)</label>
+            <input type="text" id="setB2bWa" dir="ltr" placeholder="22236199416">
+            <div class="hint">يُستخدم في قسم المؤسسات فقط</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>إحصائيات الموقع (الدليل الاجتماعي)</h2>
+        <div class="card-sub">الأرقام التي تظهر في قسم العدادات المتحركة</div>
+        <div class="grid-2">
+          <div class="field"><label>📦 طلبات تم تسليمها</label><input type="number" id="setOrders" min="0"></div>
+          <div class="field"><label>😊 زبائن راضون</label><input type="number" id="setClients" min="0"></div>
+          <div class="field"><label>🏢 مؤسسات شريكة</label><input type="number" id="setPartners" min="0"></div>
+          <div class="field"><label>📅 سنوات الخبرة</label><input type="number" id="setYears" min="0"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>روابط التواصل الاجتماعي</h2>
+        <div class="card-sub">اترك الحقل فارغاً لإخفاء الأيقونة من الموقع</div>
+        <div class="grid-3">
+          <div class="field"><label>فيسبوك</label><input type="url" id="setFacebook" dir="ltr" placeholder="https://facebook.com/..."></div>
+          <div class="field"><label>إنستغرام</label><input type="url" id="setInstagram" dir="ltr" placeholder="https://instagram.com/..."></div>
+          <div class="field"><label>تيك توك</label><input type="url" id="setTiktok" dir="ltr" placeholder="https://tiktok.com/@..."></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>تغيير كلمة مرور اللوحة</h2>
+        <div class="card-sub">لا تشارك كلمة المرور مع أحد، وغيّرها من هنا متى شئت</div>
+        <div class="grid-2">
+          <div class="field"><label>كلمة المرور الجديدة</label><input type="password" id="newPass" autocomplete="new-password"></div>
+          <div class="field"><label>تأكيد كلمة المرور</label><input type="password" id="newPass2" autocomplete="new-password"></div>
+        </div>
+        <button class="btn btn-navy btn-sm" id="changePassBtn">تغيير كلمة المرور</button>
+      </div>
+
+      <button class="btn btn-primary" id="saveSettingsBtn" style="width:100%">💾 حفظ كل الإعدادات</button>
+    </div>
+
+    <!-- ===== تبويب الشعار ===== -->
+    <div class="tab-panel" id="tab-logo">
+      <div class="card">
+        <h2>شعار الموقع</h2>
+        <div class="card-sub">ارفع صورة الشعار (يُفضَّل مربعة، PNG أو JPG). تُصغَّر تلقائياً وتظهر في ترويسة الموقع وشاشة اللغة والتذييل.</div>
+        <div class="logo-preview" id="logoPreview">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+        </div>
+        <input type="file" id="logoInput" accept="image/*" style="max-width:340px">
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="saveLogoBtn">💾 حفظ الشعار</button>
+          <button class="btn btn-danger" id="removeLogoBtn">إزالة الشعار (العودة للافتراضي)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== تبويب النشر ===== -->
+    <div class="tab-panel" id="tab-publish">
+      <div class="note">
+        ⚠️ <b>مهم:</b> تعديلاتك تُحفَظ حالياً في متصفحك أنت فقط (localStorage). لكي يراها كل الزوار،
+        نزّل ملف البيانات من هنا وارفعه إلى موقعك مكان الملف <b dir="ltr">assets/data.js</b>
+        (الخطوات مشروحة في ملف README). عند الترقية إلى قاعدة بيانات Supabase تصبح هذه الخطوة تلقائية.
+      </div>
+      <div class="card">
+        <h2>📤 نشر التعديلات</h2>
+        <div class="card-sub">ينزّل ملف <b dir="ltr">data.js</b> يحتوي كل بياناتك الحالية (المنتجات + الأرقام + الشعار)</div>
+        <button class="btn btn-primary" id="exportBtn">⬇️ تنزيل ملف البيانات (data.js)</button>
+      </div>
+      <div class="card">
+        <h2>💾 نسخة احتياطية / استعادة</h2>
+        <div class="card-sub">احفظ نسخة JSON من بياناتك أو استعد نسخة سابقة</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-navy" id="backupBtn">⬇️ تنزيل نسخة احتياطية (JSON)</button>
+          <label class="btn btn-ghost" style="margin:0">
+            ⬆️ استعادة من ملف JSON
+            <input type="file" id="importInput" accept=".json,application/json" hidden>
+          </label>
+        </div>
+      </div>
+      <div class="card">
+        <h2>♻️ إعادة التعيين</h2>
+        <div class="card-sub">حذف كل التعديلات المحلية والعودة إلى بيانات الملف <b dir="ltr">assets/data.js</b></div>
+        <button class="btn btn-danger" id="resetBtn">حذف التعديلات المحلية</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ نافذة إضافة/تعديل منتج ============ -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h2 id="modalTitle">إضافة منتج جديد</h2>
+    <form id="productForm">
+      <input type="hidden" id="pId">
+
+      <div class="lang-fields">
+        <div class="lf-title">🇲🇷 العربية</div>
+        <div class="field"><label>اسم المنتج (عربي) *</label><input type="text" id="pNameAr" required></div>
+        <div class="field" style="margin:0"><label>الوصف (عربي) *</label><textarea id="pDescAr" required></textarea></div>
+      </div>
+
+      <div class="lang-fields">
+        <div class="lf-title">🇫🇷 Français</div>
+        <div class="field"><label>Nom du produit (français) *</label><input type="text" id="pNameFr" dir="ltr" required></div>
+        <div class="field" style="margin:0"><label>Description (français) *</label><textarea id="pDescFr" dir="ltr" required></textarea></div>
+      </div>
+
+      <div class="lang-fields">
+        <div class="lf-title">🇬🇧 English</div>
+        <div class="field"><label>Product name (English) *</label><input type="text" id="pNameEn" dir="ltr" required></div>
+        <div class="field" style="margin:0"><label>Description (English) *</label><textarea id="pDescEn" dir="ltr" required></textarea></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>الفئة *</label>
+          <select id="pCategory" required></select>
+        </div>
+        <div class="field">
+          <label>الشارة</label>
+          <select id="pBadge">
+            <option value="">بدون شارة</option>
+            <option value="best">⭐ الأكثر طلباً</option>
+            <option value="new">🆕 جديد</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>السعر بالأوقية (MRU)</label>
+          <input type="number" id="pPrice" min="0" step="any" placeholder="اتركه فارغاً لعرض «السعر عند الطلب»">
+        </div>
+        <div class="field">
+          <label>أيقونة بديلة (إيموجي)</label>
+          <input type="text" id="pIcon" placeholder="🩺" maxlength="4">
+          <div class="hint">تظهر إذا لم توجد صورة للمنتج</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>صور المنتج (يمكن اختيار أكثر من صورة)</label>
+        <input type="file" id="pImageInput" accept="image/*" multiple>
+        <div class="img-grid" id="pImagesGrid"></div>
+        <div class="hint">الصورة الأولى هي الرئيسية في البطاقة، والبقية تظهر في المعرض عند تكبير المنتج. تُضغَط الصور تلقائياً. اضغط ✕ لحذف صورة، أو ⭐ لجعلها الرئيسية.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelModalBtn">إلغاء</button>
+        <button type="submit" class="btn btn-primary">💾 حفظ المنتج</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ نافذة إضافة/تعديل فئة ============ -->
+<div class="modal-overlay" id="catModal">
+  <div class="modal">
+    <h2 id="catModalTitle">إضافة فئة جديدة</h2>
+    <form id="catForm">
+      <input type="hidden" id="cId">
+      <div class="grid-2">
+        <div class="field">
+          <label>الأيقونة (إيموجي) *</label>
+          <input type="text" id="cIcon" placeholder="🩺" maxlength="4" required>
+        </div>
+      </div>
+      <div class="lang-fields">
+        <div class="lf-title">🇲🇷 العربية</div>
+        <div class="field"><label>اسم الفئة (عربي) *</label><input type="text" id="cNameAr" required></div>
+        <div class="field" style="margin:0"><label>وصف قصير (عربي)</label><input type="text" id="cDescAr"></div>
+      </div>
+      <div class="lang-fields">
+        <div class="lf-title">🇫🇷 Français</div>
+        <div class="field"><label>Nom de la catégorie (français) *</label><input type="text" id="cNameFr" dir="ltr" required></div>
+        <div class="field" style="margin:0"><label>Brève description (français)</label><input type="text" id="cDescFr" dir="ltr"></div>
+      </div>
+      <div class="lang-fields">
+        <div class="lf-title">🇬🇧 English</div>
+        <div class="field"><label>Category name (English) *</label><input type="text" id="cNameEn" dir="ltr" required></div>
+        <div class="field" style="margin:0"><label>Short description (English)</label><input type="text" id="cDescEn" dir="ltr"></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelCatBtn">إلغاء</button>
+        <button type="submit" class="btn btn-primary">💾 حفظ الفئة</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script src="store.js"></script>
+<script>
+"use strict";
+
+/* =========================================================
+   الحماية بكلمة مرور
+   ---------------------------------------------------------
+   ملاحظة صريحة: هذه حماية على مستوى المتصفح تمنع الوصول العرضي،
+   وليست حماية خادم حقيقية. عند الترقية إلى Supabase استخدم
+   نظام تسجيل الدخول الحقيقي (Supabase Auth).
+   ========================================================= */
+const PASS_KEY = "rim_medical_admin_hash";
+const SESSION_KEY = "rim_medical_admin_session";
+/* بصمة كلمة المرور الافتراضية (لا تُخزَّن الكلمة نفسها في الكود) */
+const DEFAULT_HASHES = [
+  "4a19ab483887826a3d6df217d30b66eb8dc74cb717f38ac9f7fe94c1a7fdb224",
+  "djb2-98b349f8"
+];
+
+async function hashText(text) {
+  if (window.crypto && crypto.subtle) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("rim-salt::" + text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  /* بديل بسيط إذا لم تتوفر crypto.subtle (متصفحات قديمة جداً) */
+  let h = 5381;
+  const s = "rim-salt::" + text;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+  return "djb2-" + h.toString(16);
+}
+
+async function checkPassword(entered) {
+  const enteredHash = await hashText(entered);
+  const custom = localStorage.getItem(PASS_KEY);
+  if (custom) return enteredHash === custom;
+  return DEFAULT_HASHES.includes(enteredHash);
+}
+
+const $ = (s, ctx) => (ctx || document).querySelector(s);
+const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
+
+const loginView = $("#loginView");
+const adminView = $("#adminView");
+
+function showAdmin() {
+  loginView.style.display = "none";
+  adminView.style.display = "block";
+  loadAll();
+}
+
+$("#loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (await checkPassword($("#loginPass").value)) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    showAdmin();
+  } else {
+    $("#loginError").style.display = "block";
+    $("#loginPass").value = "";
+  }
+});
+
+$("#logoutBtn").addEventListener("click", () => {
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+});
+
+if (sessionStorage.getItem(SESSION_KEY) === "1") showAdmin();
+
+/* =========================================================
+   أدوات عامة
+   ========================================================= */
+let DATA = RimStore.getData();
+
+/* الفئات ديناميكية من البيانات */
+const getCats = () => DATA.categories || [];
+const catLabel = (id) => {
+  const c = getCats().find(c => c.id === id);
+  return c ? c.name.ar : id;
+};
+const productImages = (p) => (Array.isArray(p.images) && p.images.length)
+  ? p.images
+  : (p.image ? [p.image] : []);
+
+let toastTimer;
+function toast(msg, type) {
+  const el = $("#toast");
+  el.textContent = msg;
+  el.className = type || "";
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 3000);
+}
+
+function persist() {
+  if (RimStore.saveData(DATA)) {
+    toast("✅ تم الحفظ في المتصفح — لا تنسَ «النشر» ليراه الزوار", "ok");
+  } else {
+    toast("تعذّر الحفظ — قد تكون مساحة التخزين ممتلئة (صور كبيرة؟)", "err");
+  }
+}
+
+/* ضغط الصور إلى حجم معقول قبل الحفظ */
+function compressImage(file, maxSize, cb) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      cb(canvas.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = () => toast("تعذّر قراءة الصورة", "err");
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* =========================================================
+   التبويبات
+   ========================================================= */
+$$(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    $$(".tab-btn").forEach(b => b.classList.remove("active"));
+    $$(".tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    $("#tab-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+/* =========================================================
+   المنتجات
+   ========================================================= */
+function renderProducts() {
+  const list = $("#productsList");
+  list.innerHTML = "";
+  if (!DATA.products.length) {
+    list.innerHTML = '<div class="empty-msg">لا توجد منتجات بعد — أضف أول منتج من الزر أعلاه</div>';
+    return;
+  }
+  DATA.products.forEach(p => {
+    const row = document.createElement("div");
+    row.className = "p-row";
+    const badge = p.badge === "best" ? "⭐ الأكثر طلباً" : p.badge === "new" ? "🆕 جديد" : "";
+    const imgs = productImages(p);
+    row.innerHTML =
+      '<div class="p-thumb">' + (imgs.length ? '<img src="' + imgs[0] + '" alt="">' : (p.icon || "🩺")) + '</div>' +
+      '<div class="p-info"><h3></h3><div class="meta">' +
+        '<span>' + catLabel(p.category) + '</span>' +
+        (imgs.length ? '<span>📷 ' + imgs.length + '</span>' : "") +
+        '<span>' + (p.price ? Number(p.price).toLocaleString("en-US") + " MRU" : "السعر عند الطلب") + '</span>' +
+        (badge ? '<span class="badge-tag">' + badge + '</span>' : "") +
+      '</div></div>' +
+      '<div class="p-actions">' +
+        '<button class="btn btn-ghost btn-sm edit-btn">✏️ تعديل</button>' +
+        '<button class="btn btn-danger btn-sm del-btn">🗑️ حذف</button>' +
+      '</div>';
+    row.querySelector("h3").textContent = p.name.ar;
+    row.querySelector(".edit-btn").addEventListener("click", () => openModal(p));
+    row.querySelector(".del-btn").addEventListener("click", () => {
+      if (confirm('هل أنت متأكد من حذف «' + p.name.ar + '»؟')) {
+        DATA.products = DATA.products.filter(x => x.id !== p.id);
+        persist();
+        renderProducts();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+/* --- نافذة المنتج --- */
+const modal = $("#productModal");
+let modalImages = [];
+
+function fillCategorySelect() {
+  const sel = $("#pCategory");
+  sel.innerHTML = "";
+  getCats().forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = (c.icon ? c.icon + " " : "") + c.name.ar;
+    sel.appendChild(opt);
+  });
+}
+
+function openModal(p) {
+  fillCategorySelect();
+  $("#modalTitle").textContent = p ? "تعديل المنتج" : "إضافة منتج جديد";
+  $("#pId").value = p ? p.id : "";
+  $("#pNameAr").value = p ? p.name.ar : "";
+  $("#pNameFr").value = p ? p.name.fr : "";
+  $("#pNameEn").value = p ? p.name.en : "";
+  $("#pDescAr").value = p ? p.desc.ar : "";
+  $("#pDescFr").value = p ? p.desc.fr : "";
+  $("#pDescEn").value = p ? p.desc.en : "";
+  $("#pCategory").value = p ? p.category : (getCats()[0] && getCats()[0].id) || "";
+  $("#pBadge").value = p && p.badge ? p.badge : "";
+  $("#pPrice").value = p && p.price != null ? p.price : "";
+  $("#pIcon").value = p ? (p.icon || "") : "";
+  $("#pImageInput").value = "";
+  modalImages = p ? productImages(p).slice() : [];
+  renderModalImages();
+  modal.classList.add("open");
+}
+
+function renderModalImages() {
+  const grid = $("#pImagesGrid");
+  grid.innerHTML = "";
+  if (!modalImages.length) {
+    const ph = document.createElement("div");
+    ph.className = "img-item";
+    ph.textContent = $("#pIcon").value || "🩺";
+    grid.appendChild(ph);
+    return;
+  }
+  modalImages.forEach((src, i) => {
+    const item = document.createElement("div");
+    item.className = "img-item" + (i === 0 ? " main" : "");
+    item.innerHTML = '<img src="' + src + '" alt="">' +
+      '<button type="button" class="im-remove" title="حذف الصورة">✕</button>' +
+      (i === 0 ? '<span class="main-tag">الرئيسية</span>'
+               : '<button type="button" class="im-star" title="جعلها الصورة الرئيسية">⭐</button>');
+    item.querySelector(".im-remove").addEventListener("click", () => {
+      modalImages.splice(i, 1);
+      renderModalImages();
+    });
+    const star = item.querySelector(".im-star");
+    if (star) star.addEventListener("click", () => {
+      modalImages.unshift(modalImages.splice(i, 1)[0]);
+      renderModalImages();
+    });
+    grid.appendChild(item);
+  });
+}
+
+$("#pIcon").addEventListener("input", () => { if (!modalImages.length) renderModalImages(); });
+$("#pImageInput").addEventListener("change", (e) => {
+  Array.from(e.target.files).forEach(file => {
+    compressImage(file, 900, (dataUrl) => {
+      modalImages.push(dataUrl);
+      renderModalImages();
+    });
+  });
+  e.target.value = "";
+});
+
+$("#addProductBtn").addEventListener("click", () => openModal(null));
+$("#cancelModalBtn").addEventListener("click", () => modal.classList.remove("open"));
+modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
+
+$("#productForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const id = $("#pId").value || "p-" + Date.now();
+  const priceRaw = $("#pPrice").value.trim();
+  const product = {
+    id,
+    category: $("#pCategory").value,
+    badge: $("#pBadge").value || null,
+    price: priceRaw === "" ? null : Number(priceRaw),
+    icon: $("#pIcon").value.trim() || "🩺",
+    images: modalImages.slice(),
+    image: modalImages[0] || "",
+    name: { ar: $("#pNameAr").value.trim(), fr: $("#pNameFr").value.trim(), en: $("#pNameEn").value.trim() },
+    desc: { ar: $("#pDescAr").value.trim(), fr: $("#pDescFr").value.trim(), en: $("#pDescEn").value.trim() }
+  };
+  const idx = DATA.products.findIndex(x => x.id === id);
+  if (idx >= 0) DATA.products[idx] = product;
+  else DATA.products.unshift(product);
+  persist();
+  renderProducts();
+  modal.classList.remove("open");
+});
+
+/* =========================================================
+   الفئات (التصنيفات)
+   ========================================================= */
+const catModal = $("#catModal");
+
+function renderCats() {
+  const list = $("#catsList");
+  list.innerHTML = "";
+  if (!getCats().length) {
+    list.innerHTML = '<div class="empty-msg">لا توجد فئات — أضف أول فئة من الزر أعلاه</div>';
+    return;
+  }
+  getCats().forEach(c => {
+    const count = DATA.products.filter(p => p.category === c.id).length;
+    const row = document.createElement("div");
+    row.className = "p-row";
+    row.innerHTML =
+      '<div class="p-thumb">' + (c.icon || "🩺") + '</div>' +
+      '<div class="p-info"><h3></h3><div class="meta">' +
+        '<span>' + count + ' منتج</span><span dir="ltr"></span>' +
+      '</div></div>' +
+      '<div class="p-actions">' +
+        '<button class="btn btn-ghost btn-sm edit-btn">✏️ تعديل</button>' +
+        '<button class="btn btn-danger btn-sm del-btn">🗑️ حذف</button>' +
+      '</div>';
+    row.querySelector("h3").textContent = c.name.ar;
+    row.querySelector('.meta span[dir="ltr"]').textContent = c.name.fr + " · " + c.name.en;
+    row.querySelector(".edit-btn").addEventListener("click", () => openCatModal(c));
+    row.querySelector(".del-btn").addEventListener("click", () => {
+      if (count > 0) {
+        toast("لا يمكن حذف فئة تحتوي على منتجات (" + count + ") — انقل منتجاتها لفئة أخرى أولاً", "err");
+        return;
+      }
+      if (confirm('حذف فئة «' + c.name.ar + '»؟')) {
+        DATA.categories = getCats().filter(x => x.id !== c.id);
+        persist();
+        renderCats();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+function openCatModal(c) {
+  $("#catModalTitle").textContent = c ? "تعديل الفئة" : "إضافة فئة جديدة";
+  $("#cId").value = c ? c.id : "";
+  $("#cIcon").value = c ? (c.icon || "") : "";
+  $("#cNameAr").value = c ? c.name.ar : "";
+  $("#cNameFr").value = c ? c.name.fr : "";
+  $("#cNameEn").value = c ? c.name.en : "";
+  $("#cDescAr").value = c && c.desc ? (c.desc.ar || "") : "";
+  $("#cDescFr").value = c && c.desc ? (c.desc.fr || "") : "";
+  $("#cDescEn").value = c && c.desc ? (c.desc.en || "") : "";
+  catModal.classList.add("open");
+}
+
+$("#addCatBtn").addEventListener("click", () => openCatModal(null));
+$("#cancelCatBtn").addEventListener("click", () => catModal.classList.remove("open"));
+catModal.addEventListener("click", (e) => { if (e.target === catModal) catModal.classList.remove("open"); });
+
+$("#catForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const id = $("#cId").value || "c-" + Date.now();
+  const cat = {
+    id,
+    icon: $("#cIcon").value.trim() || "🩺",
+    name: { ar: $("#cNameAr").value.trim(), fr: $("#cNameFr").value.trim(), en: $("#cNameEn").value.trim() },
+    desc: { ar: $("#cDescAr").value.trim(), fr: $("#cDescFr").value.trim(), en: $("#cDescEn").value.trim() }
+  };
+  if (!DATA.categories) DATA.categories = [];
+  const idx = DATA.categories.findIndex(x => x.id === id);
+  if (idx >= 0) DATA.categories[idx] = cat;
+  else DATA.categories.push(cat);
+  persist();
+  renderCats();
+  catModal.classList.remove("open");
+});
+
+/* =========================================================
+   الإعدادات (الأرقام + الإحصائيات + السوشيال)
+   ========================================================= */
+function loadSettings() {
+  const s = DATA.settings;
+  $("#setCustomerWa").value = s.customerWhatsapp || "";
+  $("#setB2bWa").value = s.institutionalWhatsapp || "";
+  $("#setOrders").value = s.stats.ordersDelivered;
+  $("#setClients").value = s.stats.happyClients;
+  $("#setPartners").value = s.stats.partners;
+  $("#setYears").value = s.stats.yearsExperience;
+  $("#setFacebook").value = (s.social && s.social.facebook) || "";
+  $("#setInstagram").value = (s.social && s.social.instagram) || "";
+  $("#setTiktok").value = (s.social && s.social.tiktok) || "";
+}
+
+$("#saveSettingsBtn").addEventListener("click", () => {
+  const cust = $("#setCustomerWa").value.replace(/[^0-9]/g, "");
+  const b2b = $("#setB2bWa").value.replace(/[^0-9]/g, "");
+  if (!cust || !b2b) { toast("يرجى إدخال الرقمين بشكل صحيح", "err"); return; }
+  DATA.settings.customerWhatsapp = cust;
+  DATA.settings.institutionalWhatsapp = b2b;
+  DATA.settings.stats.ordersDelivered = Number($("#setOrders").value) || 0;
+  DATA.settings.stats.happyClients = Number($("#setClients").value) || 0;
+  DATA.settings.stats.partners = Number($("#setPartners").value) || 0;
+  DATA.settings.stats.yearsExperience = Number($("#setYears").value) || 0;
+  DATA.settings.social = {
+    facebook: $("#setFacebook").value.trim(),
+    instagram: $("#setInstagram").value.trim(),
+    tiktok: $("#setTiktok").value.trim()
+  };
+  persist();
+});
+
+$("#changePassBtn").addEventListener("click", async () => {
+  const p1 = $("#newPass").value, p2 = $("#newPass2").value;
+  if (p1.length < 6) { toast("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "err"); return; }
+  if (p1 !== p2) { toast("كلمتا المرور غير متطابقتين", "err"); return; }
+  localStorage.setItem(PASS_KEY, await hashText(p1));
+  $("#newPass").value = ""; $("#newPass2").value = "";
+  toast("✅ تم تغيير كلمة المرور", "ok");
+});
+
+/* =========================================================
+   الشعار
+   ========================================================= */
+let pendingLogo = null;
+
+function loadLogo() {
+  const box = $("#logoPreview");
+  const tb = $("#tbLogo");
+  if (DATA.settings.logo) {
+    box.innerHTML = '<img src="' + DATA.settings.logo + '" alt="">';
+    tb.innerHTML = '<img src="' + DATA.settings.logo + '" alt="">';
+  }
+}
+
+$("#logoInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  compressImage(file, 400, (dataUrl) => {
+    pendingLogo = dataUrl;
+    $("#logoPreview").innerHTML = '<img src="' + dataUrl + '" alt="">';
+  });
+});
+
+$("#saveLogoBtn").addEventListener("click", () => {
+  if (!pendingLogo) { toast("اختر صورة أولاً", "err"); return; }
+  DATA.settings.logo = pendingLogo;
+  persist();
+  loadLogo();
+});
+
+$("#removeLogoBtn").addEventListener("click", () => {
+  DATA.settings.logo = "";
+  pendingLogo = null;
+  $("#logoInput").value = "";
+  $("#logoPreview").innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>';
+  $("#tbLogo").innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>';
+  persist();
+});
+
+/* =========================================================
+   النشر / النسخ الاحتياطي / الاستعادة
+   ========================================================= */
+function download(filename, content, mime) {
+  const blob = new Blob([content], { type: mime || "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$("#exportBtn").addEventListener("click", () => {
+  download("data.js", RimStore.exportDataFile(), "text/javascript;charset=utf-8");
+  toast("✅ تم التنزيل — ارفعه مكان assets/data.js في موقعك", "ok");
+});
+
+$("#backupBtn").addEventListener("click", () => {
+  download("rim-medical-backup-" + new Date().toISOString().slice(0, 10) + ".json",
+    JSON.stringify(DATA, null, 2), "application/json");
+});
+
+$("#importInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      if (!parsed.settings || !Array.isArray(parsed.products)) throw new Error("bad");
+      DATA = parsed;
+      persist();
+      loadAll();
+      toast("✅ تمت الاستعادة بنجاح", "ok");
+    } catch (err) {
+      toast("الملف غير صالح", "err");
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = "";
+});
+
+$("#resetBtn").addEventListener("click", () => {
+  if (!confirm("سيتم حذف كل التعديلات المحلية والعودة لبيانات ملف data.js — متأكد؟")) return;
+  RimStore.resetData();
+  DATA = RimStore.getData();
+  loadAll();
+  toast("تمت إعادة التعيين", "ok");
+});
+
+/* =========================================================
+   تحميل كل شيء
+   ========================================================= */
+function loadAll() {
+  DATA = RimStore.getData();
+  renderProducts();
+  renderCats();
+  loadSettings();
+  loadLogo();
+}
+</script>
+</body>
+</html>
