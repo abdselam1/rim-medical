@@ -34,6 +34,55 @@
   --font-lat:'Manrope','Tajawal',sans-serif;
   --ease:cubic-bezier(.22,.61,.36,1);
 }
+
+/* =========================================================
+   الوضع المظلم (Dark Mode)
+   ========================================================= */
+html[data-theme="dark"]{
+  --bg:#0b1526;--card:#111f36;--ink:#e8eef7;--muted:#98a9c2;--line:#20334f;
+  --navy:#e8eef7;
+  --shadow-sm:0 2px 8px rgba(0,0,0,.35);
+  --shadow-md:0 10px 30px rgba(0,0,0,.45);
+  --shadow-lg:0 24px 60px rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+html[data-theme="dark"] header.scrolled{background:rgba(11,21,38,.92)}
+html[data-theme="dark"] header.scrolled .brand-name{color:#fff}
+html[data-theme="dark"] header.scrolled .brand-name small{color:var(--muted)}
+html[data-theme="dark"] header.scrolled nav.main-nav a{color:var(--ink)}
+html[data-theme="dark"] #reviews{background:linear-gradient(180deg,var(--bg),#0d1a30)}
+html[data-theme="dark"] .review-meta .avatar{background:linear-gradient(145deg,#24406b,#16294a)}
+.theme-toggle{
+  width:40px;height:40px;border-radius:12px;font-size:1.1rem;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  transition:background .3s,transform .3s;
+}
+.theme-toggle:hover{transform:rotate(20deg) scale(1.08)}
+header.scrolled .theme-toggle{background:rgba(15,185,177,.1);border-color:rgba(15,185,177,.3)}
+
+/* =========================================================
+   الشعار ثلاثي الأبعاد (3D Logo)
+   ========================================================= */
+.brand-logo,.gate-logo{
+  position:relative;transform-style:preserve-3d;
+  animation:logo3d 7s ease-in-out infinite;
+}
+@keyframes logo3d{
+  0%,100%{transform:perspective(520px) rotateY(-16deg) rotateX(5deg)}
+  50%{transform:perspective(520px) rotateY(16deg) rotateX(-5deg)}
+}
+.brand-logo::after,.gate-logo::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.4) 50%,transparent 68%);
+  transform:translateX(-130%);
+  animation:logoShine 7s ease-in-out infinite;
+}
+@keyframes logoShine{
+  0%,55%{transform:translateX(-130%)}
+  75%,100%{transform:translateX(130%)}
+}
+.brand-logo:hover,.gate-logo:hover{animation-play-state:paused}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
@@ -477,6 +526,48 @@ html[dir="ltr"] .p-price.ask{font-family:var(--font-lat)}
 .review-meta span{font-size:.78rem;color:var(--muted)}
 @media (max-width:860px){.reviews-grid{grid-template-columns:1fr}}
 
+/* ---- نموذج إضافة تقييم ---- */
+.review-form-wrap{
+  margin:44px auto 0;max-width:680px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:32px 28px;box-shadow:var(--shadow-sm);
+}
+.review-form-wrap h3{color:var(--navy);font-size:1.2rem;font-weight:800;margin-bottom:6px;text-align:center}
+.review-form-wrap .rf-sub{color:var(--muted);font-size:.85rem;text-align:center;margin-bottom:22px}
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:640px){.rf-grid{grid-template-columns:1fr}}
+.rf-field{margin-bottom:16px}
+.rf-field label{display:block;font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:7px}
+.rf-field input,.rf-field textarea{
+  width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--bg);color:var(--ink);font-family:inherit;font-size:.92rem;outline:none;
+  transition:border-color .3s,box-shadow .3s;
+}
+.rf-field input:focus,.rf-field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,185,177,.15)}
+.rf-field textarea{min-height:110px;resize:vertical}
+.rf-type{display:flex;gap:8px}
+.rf-type-btn{
+  flex:1;padding:11px 10px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--bg);color:var(--muted);font-weight:700;font-size:.88rem;
+  transition:background .3s,border-color .3s,color .3s;
+}
+.rf-type-btn.active{background:rgba(15,185,177,.12);border-color:var(--teal);color:var(--teal-dark)}
+html[data-theme="dark"] .rf-type-btn.active{color:var(--teal)}
+.rf-stars{display:flex;gap:4px;direction:ltr}
+html[dir="rtl"] .rf-stars{justify-content:flex-end}
+.rf-stars button{font-size:1.8rem;color:var(--line);transition:color .2s,transform .2s;line-height:1}
+.rf-stars button.on{color:var(--gold)}
+.rf-stars button:hover{transform:scale(1.2)}
+.rf-submit{width:100%;justify-content:center}
+#rvMsg{margin-top:12px;font-size:.88rem;text-align:center;display:none}
+#rvMsg.ok{display:block;color:#12b886}
+#rvMsg.err{display:block;color:#e0566e}
+.rv-type-chip{
+  display:inline-block;font-size:.7rem;font-weight:700;padding:2px 10px;border-radius:999px;
+  background:rgba(15,185,177,.12);color:var(--teal-dark);
+}
+html[data-theme="dark"] .rv-type-chip{color:var(--teal)}
+
 /* =========================================================
    10) التذييل (Footer)
    ========================================================= */
@@ -618,6 +709,7 @@ footer{
       <a href="#contact" data-i18n="nav.contact"></a>
     </nav>
     <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Dark mode">🌙</button>
       <div class="lang-switch" id="langSwitch">
         <button class="lang-btn" id="langBtn" aria-haspopup="true">
           <span>🌐</span><span id="langCurrent">العربية</span><span style="font-size:.7rem">▾</span>
@@ -774,7 +866,7 @@ footer{
       <h2 data-i18n="reviews.title"></h2>
       <p data-i18n="reviews.sub"></p>
     </div>
-    <div class="reviews-grid">
+    <div class="reviews-grid" id="reviewsGrid">
       <div class="review-card reveal">
         <div class="stars">★★★★★</div>
         <p class="quote" data-i18n="reviews.r1"></p>
@@ -790,6 +882,43 @@ footer{
         <p class="quote" data-i18n="reviews.r3"></p>
         <div class="review-meta"><span class="avatar">ع</span><div><h4 data-i18n="reviews.r3n"></h4><span data-i18n="reviews.r3t"></span></div></div>
       </div>
+    </div>
+
+    <!-- نموذج إضافة تقييم -->
+    <div class="review-form-wrap reveal">
+      <h3 data-i18n="reviews.formTitle"></h3>
+      <p class="rf-sub" data-i18n="reviews.formSub"></p>
+      <form id="reviewForm">
+        <div class="rf-grid">
+          <div class="rf-field">
+            <label for="rvName" data-i18n="reviews.nameLbl"></label>
+            <input type="text" id="rvName" maxlength="60" minlength="2" required>
+          </div>
+          <div class="rf-field">
+            <label data-i18n="reviews.typeLbl"></label>
+            <div class="rf-type" id="rvType">
+              <button type="button" class="rf-type-btn active" data-type="individual" data-i18n="reviews.typeInd"></button>
+              <button type="button" class="rf-type-btn" data-type="institution" data-i18n="reviews.typeInst"></button>
+            </div>
+          </div>
+        </div>
+        <div class="rf-field">
+          <label data-i18n="reviews.ratingLbl"></label>
+          <div class="rf-stars" id="rvStars">
+            <button type="button" class="on" data-v="1">★</button>
+            <button type="button" class="on" data-v="2">★</button>
+            <button type="button" class="on" data-v="3">★</button>
+            <button type="button" class="on" data-v="4">★</button>
+            <button type="button" class="on" data-v="5">★</button>
+          </div>
+        </div>
+        <div class="rf-field">
+          <label for="rvComment" data-i18n="reviews.commentLbl"></label>
+          <textarea id="rvComment" maxlength="600" minlength="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary rf-submit" data-i18n="reviews.submit"></button>
+        <div id="rvMsg"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -921,7 +1050,12 @@ const I18N = {
       r2:"«جهاز قياس السكر دقيق وسهل الاستخدام، وساعدوني في الاختيار قبل الشراء. أنصح بالتعامل معهم.»",
       r2n:"فاطمة بنت سيدي", r2t:"زبونة — نواذيبو",
       r3:"«نتعامل معهم كصيدلية منذ أكثر من سنة، التزام في المواعيد وأسعار الجملة ممتازة.»",
-      r3n:"صيدلية الشفاء", r3t:"مؤسسة شريكة"
+      r3n:"صيدلية الشفاء", r3t:"مؤسسة شريكة",
+      formTitle:"شاركنا تجربتك ⭐", formSub:"رأيك يهمنا ويساعد الآخرين — يظهر تقييمك بعد مراجعة الإدارة",
+      nameLbl:"الاسم الكامل (مطلوب)", typeLbl:"أنت تقيّم بصفتك", typeInd:"فرد", typeInst:"مؤسسة",
+      ratingLbl:"تقييمك", commentLbl:"تعليقك", submit:"إرسال التقييم",
+      thanks:"✅ شكراً لك! تم استلام تقييمك وسيظهر بعد مراجعة الإدارة.",
+      sendErr:"تعذّر الإرسال — تحقق من اتصالك بالإنترنت وحاول مجدداً."
     },
     footer: {
       about:"Rim Medical — متجر متخصص في بيع وتوريد المعدات والمستلزمات الطبية للأفراد والمؤسسات، بجودة موثوقة وأسعار منافسة.",
@@ -998,7 +1132,12 @@ const I18N = {
       r2:"« Le glucomètre est précis et facile à utiliser, et ils m'ont bien conseillée avant l'achat. Je recommande. »",
       r2n:"Fatima Mint Sidi", r2t:"Cliente — Nouadhibou",
       r3:"« Nous travaillons avec eux comme pharmacie depuis plus d'un an : ponctualité et excellents prix de gros. »",
-      r3n:"Pharmacie Echifa", r3t:"Institution partenaire"
+      r3n:"Pharmacie Echifa", r3t:"Institution partenaire",
+      formTitle:"Partagez votre expérience ⭐", formSub:"Votre avis compte et aide les autres — il sera publié après validation",
+      nameLbl:"Nom complet (obligatoire)", typeLbl:"Vous évaluez en tant que", typeInd:"Particulier", typeInst:"Institution",
+      ratingLbl:"Votre note", commentLbl:"Votre commentaire", submit:"Envoyer l'avis",
+      thanks:"✅ Merci ! Votre avis a bien été reçu et sera publié après validation.",
+      sendErr:"Échec de l'envoi — vérifiez votre connexion et réessayez."
     },
     footer: {
       about:"Rim Medical — boutique spécialisée dans la vente et la fourniture d'équipements médicaux pour particuliers et institutions, avec une qualité fiable et des prix compétitifs.",
@@ -1075,7 +1214,12 @@ const I18N = {
       r2:"“The glucose meter is accurate and easy to use, and they advised me well before buying. Highly recommended.”",
       r2n:"Fatima Mint Sidi", r2t:"Customer — Nouadhibou",
       r3:"“We've worked with them as a pharmacy for over a year — always on time with excellent wholesale prices.”",
-      r3n:"Echifa Pharmacy", r3t:"Partner Institution"
+      r3n:"Echifa Pharmacy", r3t:"Partner Institution",
+      formTitle:"Share Your Experience ⭐", formSub:"Your feedback matters and helps others — it appears after admin approval",
+      nameLbl:"Full name (required)", typeLbl:"You are reviewing as", typeInd:"Individual", typeInst:"Institution",
+      ratingLbl:"Your rating", commentLbl:"Your comment", submit:"Submit Review",
+      thanks:"✅ Thank you! Your review was received and will appear after approval.",
+      sendErr:"Sending failed — check your connection and try again."
     },
     footer: {
       about:"Rim Medical — a store specialized in selling and supplying medical equipment for individuals and institutions, with reliable quality and competitive prices.",
@@ -1408,6 +1552,85 @@ statsObserver.observe($("#stats"));
 $("#year").textContent = new Date().getFullYear();
 setLang(currentLang);
 observeReveals();
+
+/* =========================================================
+   الوضع المظلم
+   ========================================================= */
+const THEME_KEY = "rim_medical_theme";
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $("#themeToggle").textContent = t === "dark" ? "☀️" : "🌙";
+}
+applyTheme(localStorage.getItem(THEME_KEY) || "light");
+$("#themeToggle").addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  applyTheme(next);
+});
+
+/* =========================================================
+   تقييمات الزبائن الحقيقية
+   ========================================================= */
+let REVIEWS = [];
+const escHtml = (s) => { const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML; };
+
+function renderReviews() {
+  if (!REVIEWS.length) return; /* لا تقييمات حقيقية بعد — تبقى النماذج */
+  $("#reviewsGrid").innerHTML = REVIEWS.map(r => `
+    <div class="review-card">
+      <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+      <p class="quote">«${escHtml(r.comment)}»</p>
+      <div class="review-meta">
+        <span class="avatar">${escHtml((r.name || "؟").trim().charAt(0))}</span>
+        <div><h4>${escHtml(r.name)}</h4><span class="rv-type-chip">${r.reviewer_type === "institution" ? t("reviews.typeInst") : t("reviews.typeInd")}</span></div>
+      </div>
+    </div>`).join("");
+}
+
+RimStore.fetchReviews().then(rows => { REVIEWS = rows || []; renderReviews(); });
+
+/* إعادة عرض التقييمات عند تغيير اللغة (لتحديث نص "فرد/مؤسسة") */
+const __setLangOrig = setLang;
+setLang = function (l) { __setLangOrig(l); renderReviews(); };
+
+/* نموذج إرسال تقييم */
+let rvSelectedType = "individual";
+let rvSelectedRating = 5;
+
+$$("#rvType .rf-type-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    rvSelectedType = btn.dataset.type;
+    $$("#rvType .rf-type-btn").forEach(b => b.classList.toggle("active", b === btn));
+  });
+});
+
+$$("#rvStars button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    rvSelectedRating = parseInt(btn.dataset.v, 10);
+    $$("#rvStars button").forEach(b => b.classList.toggle("on", parseInt(b.dataset.v, 10) <= rvSelectedRating));
+  });
+});
+
+$("#reviewForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const msg = $("#rvMsg");
+  const submitBtn = $("#reviewForm .rf-submit");
+  submitBtn.disabled = true;
+  msg.className = "";
+  RimStore.submitReview({
+    name: $("#rvName").value,
+    reviewer_type: rvSelectedType,
+    rating: rvSelectedRating,
+    comment: $("#rvComment").value
+  }).then(() => {
+    msg.textContent = t("reviews.thanks");
+    msg.className = "ok";
+    $("#reviewForm").reset();
+  }).catch(() => {
+    msg.textContent = t("reviews.sendErr");
+    msg.className = "err";
+  }).finally(() => { submitBtn.disabled = false; });
+});
 
 /* عند وصول أحدث نسخة من قاعدة البيانات: إعادة العرض بها */
 RimStore.ready.then(() => {

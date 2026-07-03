@@ -229,6 +229,7 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
       <button class="tab-btn" data-tab="categories">🗂️ الفئات</button>
       <button class="tab-btn" data-tab="settings">📱 أرقام التواصل</button>
       <button class="tab-btn" data-tab="logo">🖼️ الشعار</button>
+      <button class="tab-btn" data-tab="reviews">⭐ التقييمات</button>
       <button class="tab-btn" data-tab="publish">🚀 النشر والنسخ الاحتياطي</button>
     </div>
 
@@ -356,6 +357,20 @@ html[dir="ltr"] #toast{transform:translateX(-50%) translateY(80px)}
         <h2>♻️ إعادة التحميل</h2>
         <div class="card-sub">تجاهل ما على الشاشة وإعادة تحميل آخر نسخة منشورة من قاعدة البيانات</div>
         <button class="btn btn-danger" id="resetBtn">إعادة التحميل من قاعدة البيانات</button>
+      </div>
+    </div>
+
+    <!-- ===== تبويب التقييمات ===== -->
+    <div class="tab-panel" id="tab-reviews">
+      <div class="card">
+        <div class="products-toolbar">
+          <div>
+            <h2>تقييمات الزبائن</h2>
+            <div class="card-sub" style="margin:0">التقييمات الجديدة لا تظهر في الموقع إلا بعد اعتمادها من هنا</div>
+          </div>
+          <button class="btn btn-navy btn-sm" id="reloadReviewsBtn">🔄 تحديث القائمة</button>
+        </div>
+        <div id="reviewsList"></div>
       </div>
     </div>
   </main>
@@ -943,6 +958,66 @@ $("#resetBtn").addEventListener("click", () => {
   RimStore.resetData();
   location.reload();
 });
+
+/* =========================================================
+   تقييمات الزبائن (اعتماد / إخفاء / حذف)
+   ========================================================= */
+const escR = (s) => { const d = document.createElement("div"); d.textContent = s ?? ""; return d.innerHTML; };
+
+async function loadReviews() {
+  const wrap = $("#reviewsList");
+  wrap.innerHTML = '<p style="color:var(--muted);padding:14px 0">جارٍ التحميل…</p>';
+  let rows;
+  try {
+    rows = await RimStore.adminFetchReviews();
+  } catch (err) {
+    wrap.innerHTML = `<p style="color:var(--danger);padding:14px 0">⚠️ ${escR(err.message)}</p>`;
+    return;
+  }
+  if (!rows.length) {
+    wrap.innerHTML = '<p style="color:var(--muted);padding:14px 0">لا توجد تقييمات بعد — عندما يرسل الزبائن تقييماتهم ستظهر هنا.</p>';
+    return;
+  }
+  wrap.innerHTML = rows.map(r => `
+    <div class="p-row" style="align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:220px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px">
+          <b>${escR(r.name)}</b>
+          <span style="font-size:.72rem;background:rgba(15,185,177,.12);color:#0a8f89;padding:2px 10px;border-radius:999px">${r.reviewer_type === "institution" ? "🏢 مؤسسة" : "👤 فرد"}</span>
+          <span style="color:#c9a24b;letter-spacing:2px">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+          <span style="font-size:.72rem;padding:2px 10px;border-radius:999px;${r.approved ? "background:#d3f9d8;color:#2b8a3e" : "background:#fff3bf;color:#e67700"}">${r.approved ? "✔ معتمد — ظاهر في الموقع" : "⏳ بانتظار الموافقة"}</span>
+          <span style="font-size:.72rem;color:var(--muted)">${new Date(r.created_at).toLocaleDateString("ar-MA")}</span>
+        </div>
+        <p style="font-size:.9rem;margin:0">${escR(r.comment)}</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button class="btn btn-sm ${r.approved ? "btn-ghost" : "btn-primary"}" data-rv-approve="${r.id}" data-rv-to="${r.approved ? "false" : "true"}">${r.approved ? "إخفاء" : "✔ اعتماد"}</button>
+        <button class="btn btn-sm btn-danger" data-rv-del="${r.id}">🗑️ حذف</button>
+      </div>
+    </div>`).join("");
+}
+
+$("#reviewsList").addEventListener("click", async (e) => {
+  const ap = e.target.closest("[data-rv-approve]");
+  const del = e.target.closest("[data-rv-del]");
+  if (!ap && !del) return;
+  try {
+    if (ap) {
+      await RimStore.setReviewApproval(ap.dataset.rvApprove, ap.dataset.rvTo === "true");
+      toast(ap.dataset.rvTo === "true" ? "✅ اعتُمد التقييم وأصبح ظاهراً في الموقع" : "تم إخفاء التقييم من الموقع", "ok");
+    } else {
+      if (!confirm("حذف هذا التقييم نهائياً؟")) return;
+      await RimStore.deleteReview(del.dataset.rvDel);
+      toast("🗑️ حُذف التقييم", "ok");
+    }
+    loadReviews();
+  } catch (err) {
+    toast("⚠️ " + err.message, "err");
+  }
+});
+
+$('[data-tab="reviews"]').addEventListener("click", loadReviews);
+$("#reloadReviewsBtn").addEventListener("click", loadReviews);
 
 /* =========================================================
    تحميل كل شيء

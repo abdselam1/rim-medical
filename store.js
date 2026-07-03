@@ -228,6 +228,84 @@
       });
   }
 
+  /* =========================================================
+     تقييمات الزبائن (Reviews)
+     ========================================================= */
+
+  /* جلب التقييمات المعتمدة (للموقع العام) */
+  function fetchReviews() {
+    return fetch(SUPA_URL + "/rest/v1/reviews?approved=eq.true&select=name,reviewer_type,rating,comment,created_at&order=created_at.desc&limit=30", {
+      headers: { apikey: SUPA_KEY }
+    })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .catch(function () { return []; });
+  }
+
+  /* إرسال تقييم جديد (من أي زائر — يظهر بعد موافقة الإدارة) */
+  function submitReview(review) {
+    return fetch(SUPA_URL + "/rest/v1/reviews", {
+      method: "POST",
+      headers: { apikey: SUPA_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: String(review.name || "").trim().slice(0, 60),
+        reviewer_type: review.reviewer_type === "institution" ? "institution" : "individual",
+        rating: Math.min(5, Math.max(1, parseInt(review.rating, 10) || 5)),
+        comment: String(review.comment || "").trim().slice(0, 600)
+      })
+    }).then(function (r) {
+      if (r.ok) return true;
+      return r.json().then(function (j) {
+        throw new Error((j && j.message) || "تعذّر الإرسال — تحقق من البيانات");
+      });
+    });
+  }
+
+  /* (للوحة التحكم) كل التقييمات بما فيها غير المعتمدة */
+  function adminFetchReviews() {
+    return freshSession().then(function (s) {
+      return fetch(SUPA_URL + "/rest/v1/reviews?select=*&order=created_at.desc", {
+        headers: { apikey: SUPA_KEY, Authorization: "Bearer " + s.access_token }
+      }).then(function (r) {
+        if (!r.ok) throw new Error("تعذّر جلب التقييمات");
+        return r.json();
+      });
+    });
+  }
+
+  /* (للوحة التحكم) اعتماد أو إخفاء تقييم */
+  function setReviewApproval(id, approved) {
+    return freshSession().then(function (s) {
+      return fetch(SUPA_URL + "/rest/v1/reviews?id=eq." + encodeURIComponent(id), {
+        method: "PATCH",
+        headers: {
+          apikey: SUPA_KEY, Authorization: "Bearer " + s.access_token,
+          "Content-Type": "application/json", Prefer: "return=representation"
+        },
+        body: JSON.stringify({ approved: !!approved })
+      }).then(function (r) {
+        return r.json().then(function (rows) {
+          if (r.ok && Array.isArray(rows) && rows.length) return true;
+          throw new Error("لم يُنفَّذ — تحقق من تسجيل الدخول");
+        });
+      });
+    });
+  }
+
+  /* (للوحة التحكم) حذف تقييم نهائياً */
+  function deleteReview(id) {
+    return freshSession().then(function (s) {
+      return fetch(SUPA_URL + "/rest/v1/reviews?id=eq." + encodeURIComponent(id), {
+        method: "DELETE",
+        headers: { apikey: SUPA_KEY, Authorization: "Bearer " + s.access_token, Prefer: "return=representation" }
+      }).then(function (r) {
+        return r.json().then(function (rows) {
+          if (r.ok && Array.isArray(rows) && rows.length) return true;
+          throw new Error("لم يُحذف — تحقق من تسجيل الدخول");
+        });
+      });
+    });
+  }
+
   /* توليد محتوى ملف data.js من البيانات الحالية (نسخة احتياطية) */
   function exportDataFile() {
     var data = getData();
@@ -265,6 +343,11 @@
     signUp: signUp,
     signOut: signOut,
     changePassword: changePassword,
-    publish: publish
+    publish: publish,
+    fetchReviews: fetchReviews,
+    submitReview: submitReview,
+    adminFetchReviews: adminFetchReviews,
+    setReviewApproval: setReviewApproval,
+    deleteReview: deleteReview
   };
 })();
