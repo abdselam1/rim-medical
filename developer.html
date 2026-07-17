@@ -7,23 +7,24 @@
     <meta name="description" content="محمد عبد السلام — أبني للمؤسسات مواقع كاملة ومتاجر إلكترونية بلوحات تحكم سهلة، مدعومة بخبرة في سيكولوجية الرغبة والتسويق الرقمي. نواكشوط، موريتانيا.">
     <meta name="theme-color" content="#080502">
     <meta property="og:title" content="محمد عبد السلام — مطوّر مواقع المؤسسات">
-    <meta property="og:description" content="سيكولوجية الرغبة تُقابل التسويق الرقمي — مواقع ومتاجر تُبنى بصبر الصحراء وتُصقل بدقة الذهب.">
+    <meta property="og:description" content="سيكولوجية الرغبة تُقابل التسويق الرقمي — رحلة صحراوية رقمية من نواكشوط.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@200;300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --night: #080502;
             --night-soft: #0e0a05;
-            --dune: #171006;
-            --sand: #ead9b0;
-            --sand-dim: #b9a67e;
-            --sand-faint: #776a4e;
+            --panel: rgba(10, 7, 3, 0.72);
+            --panel-solid: rgba(9, 6, 2, 0.94);
+            --sand: #f3e7c8;
+            --sand-dim: #d6c59c;
+            --sand-faint: #94855f;
             --gold: #c99a3f;
             --gold-bright: #e8bf6a;
             --gold-deep: #7a5a1e;
-            --hairline: rgba(201, 154, 63, 0.18);
-            --hairline-soft: rgba(201, 154, 63, 0.10);
+            --hairline: rgba(201, 154, 63, 0.2);
+            --hairline-soft: rgba(201, 154, 63, 0.11);
             --font-display-ar: 'Amiri', serif;
             --font-body-ar: 'Tajawal', 'Segoe UI', sans-serif;
             --font-display-lat: 'Cormorant Garamond', serif;
@@ -49,13 +50,13 @@
             background: var(--night);
             color: var(--sand);
             font-family: var(--font-body-ar);
-            font-weight: 300;
-            line-height: 1.9;
+            font-weight: 400;
+            line-height: 1.95;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
         }
-        html[dir="ltr"] body { font-family: var(--font-display-lat); font-weight: 400; }
+        html[dir="ltr"] body { font-family: var(--font-display-lat); }
 
         .display { font-family: var(--font-display-ar); font-weight: 700; }
         html[dir="ltr"] .display { font-family: var(--font-display-lat); font-weight: 500; }
@@ -134,8 +135,8 @@
             z-index: 1;
             pointer-events: none;
             background:
-                linear-gradient(180deg, transparent 55%, rgba(5, 3, 1, 0.5) 100%),
-                radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(4, 2, 0, 0.7) 100%);
+                linear-gradient(180deg, rgba(5, 3, 1, 0.3) 0%, transparent 16%),
+                radial-gradient(ellipse at 50% 50%, transparent 62%, rgba(4, 2, 0, 0.5) 100%);
         }
 
         /* ============ HUD ============ */
@@ -183,7 +184,6 @@
         .hud-wa {
             bottom: 1.6rem;
             inset-inline-end: 2rem;
-            transition: opacity 1.4s ease 0.9s, color 0.4s;
         }
         .hud-wa .mono { transition: color 0.4s; }
         .hud-wa:hover .mono { color: var(--gold-bright); }
@@ -201,8 +201,8 @@
             opacity: 0;
             transition: opacity 1.4s ease 1.6s;
         }
-        body.loaded .scroll-hint { opacity: 1; transition: opacity 0.6s ease; }
-        body.loaded.scrolled .scroll-hint { opacity: 0; }
+        body.loaded .scroll-hint { opacity: 1; }
+        body.loaded.scrolled .scroll-hint { opacity: 0; transition: opacity 0.6s ease; }
         .scroll-hint-line {
             width: 1px;
             height: 42px;
@@ -261,17 +261,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 16vh 7vw;
+            padding: 15vh 7vw;
             position: relative;
         }
 
-        .scene-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
+        .scene-inner { width: 100%; max-width: 1060px; margin: 0 auto; }
+
+        /* content panels — the "emerging" cards behind each dune */
+        .panel {
+            background: var(--panel);
+            -webkit-backdrop-filter: blur(18px) saturate(1.1);
+            backdrop-filter: blur(18px) saturate(1.1);
+            border: 1px solid var(--hairline-soft);
+            border-radius: 6px;
+            padding: clamp(2rem, 4.5vw, 3.8rem);
+        }
 
         .scene-tag {
             display: flex;
             align-items: center;
             gap: 1.2rem;
-            margin-bottom: 3.2rem;
+            margin-bottom: 2.8rem;
         }
         .scene-tag::after {
             content: '';
@@ -292,14 +302,19 @@
             opacity: 0.85;
         }
 
-        /* --- reveal --- */
+        /* --- emerge reveal: content rises from behind the dunes --- */
         .reveal {
             opacity: 0;
-            transform: translateY(46px);
-            transition: opacity 1.2s var(--ease-lux), transform 1.2s var(--ease-lux);
+            transform: translateY(80px) scale(0.965);
+            filter: blur(10px);
+            transition:
+                opacity 1.3s var(--ease-lux),
+                transform 1.3s var(--ease-lux),
+                filter 1.3s var(--ease-lux);
             transition-delay: var(--d, 0s);
+            will-change: opacity, transform, filter;
         }
-        .reveal.in { opacity: 1; transform: translateY(0); }
+        .reveal.in { opacity: 1; transform: none; filter: none; }
 
         /* ============ HERO ============ */
         .hero {
@@ -315,8 +330,8 @@
         .hero-name {
             font-size: clamp(3.4rem, 12.5vw, 8.6rem);
             line-height: 1.28;
-            color: #f4e8c8;
-            text-shadow: 0 0 90px rgba(201, 154, 63, 0.28);
+            color: #f7ecce;
+            text-shadow: 0 0 90px rgba(201, 154, 63, 0.3), 0 2px 30px rgba(5, 3, 1, 0.9);
             margin-bottom: 1.4rem;
         }
         html[dir="ltr"] .hero-name {
@@ -334,27 +349,23 @@
         .hero-tagline {
             font-family: var(--font-display-ar);
             font-weight: 400;
-            font-style: normal;
-            font-size: clamp(1.15rem, 2.6vw, 1.7rem);
+            font-size: clamp(1.2rem, 2.6vw, 1.75rem);
             color: var(--gold-bright);
             margin-bottom: 1.6rem;
+            text-shadow: 0 2px 22px rgba(5, 3, 1, 0.95);
         }
         html[dir="ltr"] .hero-tagline {
             font-family: var(--font-display-lat);
             font-style: italic;
         }
         .hero-sub {
-            max-width: 560px;
+            max-width: 580px;
             margin: 0 auto;
-            font-size: clamp(0.92rem, 1.6vw, 1.05rem);
+            font-size: clamp(0.98rem, 1.7vw, 1.1rem);
             color: var(--sand-dim);
-        }
-        .hero-tagline, .hero-sub, .manifesto-text, .section-title, .svc-desc,
-        .contact-desc, .stat-label, .plans-desc {
-            text-shadow: 0 1px 18px rgba(6, 4, 1, 0.9), 0 0 42px rgba(6, 4, 1, 0.6);
+            text-shadow: 0 2px 18px rgba(5, 3, 1, 0.95), 0 0 40px rgba(5, 3, 1, 0.7);
         }
 
-        /* hero staged reveal */
         .hero .stage {
             opacity: 0;
             transform: translateY(34px);
@@ -371,10 +382,10 @@
         .manifesto-text {
             font-family: var(--font-display-ar);
             font-weight: 400;
-            font-size: clamp(1.55rem, 4vw, 2.7rem);
+            font-size: clamp(1.5rem, 3.8vw, 2.55rem);
             line-height: 2.05;
-            color: #efe2bf;
-            max-width: 940px;
+            color: #f2e5c2;
+            max-width: 920px;
         }
         html[dir="ltr"] .manifesto-text {
             font-family: var(--font-display-lat);
@@ -389,9 +400,9 @@
         .stats-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 3.5rem 5rem;
-            margin-top: 5rem;
-            padding-top: 2.6rem;
+            gap: 3rem 5rem;
+            margin-top: 4rem;
+            padding-top: 2.4rem;
             border-top: 1px solid var(--hairline-soft);
         }
         .stat-num {
@@ -406,18 +417,18 @@
         .stat-label {
             display: block;
             margin-top: 0.5rem;
-            font-size: 0.82rem;
-            color: var(--sand-faint);
-            max-width: 170px;
-            line-height: 1.7;
+            font-size: 0.88rem;
+            color: var(--sand-dim);
+            max-width: 180px;
+            line-height: 1.75;
         }
 
         /* ============ EXPERTISE ============ */
         .section-title {
-            font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+            font-size: clamp(1.9rem, 4.5vw, 3.1rem);
             line-height: 1.5;
-            color: #f0e3c2;
-            margin-bottom: 4rem;
+            color: #f4e8c8;
+            margin-bottom: 3.4rem;
             max-width: 760px;
         }
 
@@ -426,12 +437,11 @@
             display: grid;
             grid-template-columns: 4rem 1fr 1.6fr;
             gap: 2rem;
-            padding: 2.6rem 0.5rem;
+            padding: 2.4rem 0.5rem;
             border-bottom: 1px solid var(--hairline);
-            position: relative;
             transition: background 0.5s;
         }
-        .svc-row:hover { background: rgba(201, 154, 63, 0.035); }
+        .svc-row:hover { background: rgba(201, 154, 63, 0.05); }
         .svc-num {
             font-family: var(--font-mono);
             font-size: 0.72rem;
@@ -444,7 +454,7 @@
         .svc-title {
             font-family: var(--font-display-ar);
             font-weight: 700;
-            font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+            font-size: clamp(1.3rem, 2.4vw, 1.7rem);
             line-height: 1.6;
             color: var(--sand);
             transition: color 0.5s;
@@ -452,25 +462,24 @@
         html[dir="ltr"] .svc-title { font-family: var(--font-display-lat); font-weight: 500; }
         .svc-row:hover .svc-title { color: var(--gold-bright); }
         .svc-desc {
-            font-size: 0.9rem;
-            color: var(--sand-faint);
-            line-height: 1.95;
+            font-size: 0.98rem;
+            color: var(--sand-dim);
+            line-height: 2;
         }
 
         /* ============ WORKS ============ */
         .work-item {
             display: block;
-            padding: 3.4rem 0.5rem;
+            padding: 3rem 0.5rem;
             border-bottom: 1px solid var(--hairline);
-            position: relative;
             transition: background 0.5s;
         }
         .work-item:first-of-type { border-top: 1px solid var(--hairline); }
-        .work-item:hover { background: rgba(201, 154, 63, 0.035); }
+        .work-item:hover { background: rgba(201, 154, 63, 0.05); }
         .work-title {
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-size: clamp(2rem, 5.5vw, 3.6rem);
             line-height: 1.45;
-            color: #efe2bf;
+            color: #f2e5c2;
             display: flex;
             align-items: baseline;
             gap: 1.4rem;
@@ -496,7 +505,7 @@
             align-items: center;
             gap: 1.4rem;
         }
-        .work-meta .mono { letter-spacing: 0.18em; }
+        .work-meta .mono { letter-spacing: 0.18em; font-size: 0.66rem; color: var(--sand-dim); }
         .work-live {
             display: inline-flex;
             align-items: center;
@@ -521,10 +530,10 @@
 
         /* ============ PLANS ============ */
         .plans-desc {
-            color: var(--sand-faint);
-            font-size: 0.92rem;
-            max-width: 520px;
-            margin: -2.4rem 0 4rem;
+            color: var(--sand-dim);
+            font-size: 0.98rem;
+            max-width: 540px;
+            margin: -1.8rem 0 3.4rem;
         }
         .plans-grid {
             display: grid;
@@ -534,59 +543,61 @@
             border: 1px solid var(--hairline-soft);
         }
         .plan {
-            background: var(--night);
-            padding: 2.8rem 2rem 2.4rem;
+            background: rgba(10, 7, 3, 0.55);
+            padding: 2.6rem 1.9rem 2.3rem;
             display: flex;
             flex-direction: column;
             position: relative;
             transition: background 0.5s;
         }
-        .plan:hover { background: var(--night-soft); }
+        .plan:hover { background: rgba(16, 11, 5, 0.7); }
         .plan.featured {
-            background: linear-gradient(180deg, rgba(201, 154, 63, 0.07), rgba(201, 154, 63, 0.015));
-            outline: 1px solid rgba(201, 154, 63, 0.4);
+            background: linear-gradient(180deg, rgba(201, 154, 63, 0.1), rgba(201, 154, 63, 0.03));
+            outline: 1px solid rgba(201, 154, 63, 0.45);
             outline-offset: -1px;
         }
         .plan-badge {
             position: absolute;
             top: -0.55rem;
-            inset-inline-start: 2rem;
-            background: var(--night);
-            padding: 0 0.8rem;
+            inset-inline-start: 1.9rem;
+            background: #120c04;
+            padding: 0.1rem 0.8rem;
             font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 0.24em;
             text-transform: uppercase;
             color: var(--gold-bright);
+            border: 1px solid rgba(201, 154, 63, 0.35);
+            border-radius: 3px;
         }
         .plan-name {
             font-family: var(--font-display-ar);
             font-weight: 700;
             font-size: 1.55rem;
-            color: #f0e3c2;
+            color: #f4e8c8;
             margin-bottom: 0.7rem;
         }
         html[dir="ltr"] .plan-name { font-family: var(--font-display-lat); font-weight: 500; }
         .plan-desc {
-            font-size: 0.82rem;
-            color: var(--sand-faint);
-            line-height: 1.85;
-            margin-bottom: 1.8rem;
+            font-size: 0.86rem;
+            color: var(--sand-dim);
+            line-height: 1.9;
+            margin-bottom: 1.7rem;
             min-height: 3.2em;
         }
         .plan-features {
             list-style: none;
             flex: 1;
-            margin-bottom: 2.2rem;
+            margin-bottom: 2.1rem;
         }
         .plan-features li {
-            font-size: 0.82rem;
+            font-size: 0.87rem;
             color: var(--sand-dim);
-            padding: 0.72rem 0;
+            padding: 0.7rem 0;
             border-top: 1px solid var(--hairline-soft);
             display: flex;
             gap: 0.7rem;
-            line-height: 1.7;
+            line-height: 1.75;
         }
         .plan-features li::before {
             content: '✦';
@@ -598,8 +609,9 @@
         .plan-cta {
             display: block;
             text-align: center;
-            padding: 0.85rem 1rem;
-            border: 1px solid rgba(201, 154, 63, 0.4);
+            padding: 0.9rem 1rem;
+            border: 1px solid rgba(201, 154, 63, 0.45);
+            border-radius: 3px;
             font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 0.22em;
@@ -614,25 +626,22 @@
         }
 
         /* ============ CONTACT ============ */
-        .contact {
-            text-align: center;
-            align-items: center;
-        }
-        .contact .scene-tag {
-            justify-content: center;
-        }
+        .contact { text-align: center; align-items: center; }
+        .contact .scene-tag { justify-content: center; }
+        .contact .scene-tag::after { display: none; }
         .contact-title {
-            font-size: clamp(2.8rem, 9vw, 6.2rem);
+            font-size: clamp(2.8rem, 9vw, 6rem);
             line-height: 1.4;
-            color: #f4e8c8;
-            text-shadow: 0 0 80px rgba(201, 154, 63, 0.25);
+            color: #f7ecce;
+            text-shadow: 0 0 80px rgba(201, 154, 63, 0.3), 0 2px 26px rgba(5, 3, 1, 0.9);
             margin-bottom: 1.8rem;
         }
         .contact-desc {
-            max-width: 520px;
-            margin: 0 auto 3.2rem;
+            max-width: 540px;
+            margin: 0 auto 3rem;
             color: var(--sand-dim);
-            font-size: 0.95rem;
+            font-size: 1rem;
+            text-shadow: 0 2px 18px rgba(5, 3, 1, 0.95);
         }
         .contact-actions {
             display: flex;
@@ -644,16 +653,16 @@
         .btn-wa {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.8rem;
             background: linear-gradient(135deg, var(--gold), #a87c2a);
             color: #140d02;
             font-weight: 500;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 1.02rem;
             padding: 1.05rem 2.6rem;
             border-radius: 100px;
             transition: transform 0.4s var(--ease-lux), box-shadow 0.4s;
-            box-shadow: 0 0 0 0 rgba(201, 154, 63, 0);
         }
         .btn-wa:hover {
             transform: translateY(-3px);
@@ -662,72 +671,124 @@
         .btn-wa svg { width: 20px; height: 20px; flex-shrink: 0; }
         .btn-call {
             padding: 1.05rem 2.2rem;
-            border: 1px solid rgba(201, 154, 63, 0.4);
+            border: 1px solid rgba(201, 154, 63, 0.45);
             border-radius: 100px;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             color: var(--sand);
             transition: border-color 0.4s, color 0.4s;
         }
         .btn-call:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
-        .contact-number {
-            margin-top: 2.6rem;
-            direction: ltr;
-        }
+        .contact-number { margin-top: 2.6rem; direction: ltr; }
         .contact-number .mono { font-size: 0.72rem; color: var(--sand-dim); }
 
-        /* ============ FOOTER ============ */
-        footer {
-            position: relative;
-            z-index: 10;
-            border-top: 1px solid var(--hairline-soft);
-            padding: 3rem 7vw 5.4rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.6rem;
-            background: rgba(8, 5, 2, 0.6);
-            backdrop-filter: blur(6px);
+        /* ============ DESKTOP ONLY ============ */
+        @media (min-width: 901px) {
+            .scene-inner.panel { max-width: 1060px; }
         }
-        .footer-id .display {
-            font-size: 1.25rem;
-            color: var(--sand);
-        }
-        .footer-id .mono { display: block; margin-top: 0.3rem; letter-spacing: 0.2em; }
-        .footer-made { font-size: 0.78rem; color: var(--sand-faint); }
-        .footer-back {
-            font-family: var(--font-mono);
-            font-size: 0.62rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--sand-dim);
-            border-bottom: 1px solid var(--hairline);
-            padding-bottom: 0.3rem;
-            transition: color 0.4s, border-color 0.4s;
-        }
-        .footer-back:hover { color: var(--gold-bright); border-color: var(--gold); }
 
-        /* ============ RESPONSIVE ============ */
+        /* ============ TABLET ============ */
         @media (max-width: 900px) {
-            .svc-row { grid-template-columns: 2.6rem 1fr; }
+            .svc-row { grid-template-columns: 2.6rem 1fr; gap: 1.2rem 1.4rem; }
             .svc-desc { grid-column: 2; }
             .plans-grid { grid-template-columns: 1fr; }
             .plan.featured { order: -1; }
         }
+
+        /* ============ MOBILE — a distinct, calmer reading experience ============ */
         @media (max-width: 640px) {
-            .scene { padding: 12vh 6vw; }
+            body { line-height: 1.85; }
+            .scene { padding: 11vh 5vw; }
+            .panel {
+                background: var(--panel-solid);
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+                border-radius: 8px;
+                padding: 1.7rem 1.3rem;
+                border-color: var(--hairline);
+            }
+            /* simpler, cheaper emergence on phones */
+            .reveal {
+                transform: translateY(44px);
+                filter: none;
+                transition: opacity 0.9s var(--ease-lux), transform 0.9s var(--ease-lux);
+            }
             .hud-name { inset-inline-start: 1.2rem; top: 1.1rem; }
-            .hud-lang { inset-inline-end: 1.2rem; top: 1.1rem; gap: 0.8rem; }
+            .hud-lang { inset-inline-end: 1.2rem; top: 1.1rem; gap: 0.9rem; }
             .hud-coords { display: none; }
-            .hud-wa { inset-inline-end: auto; inset-inline-start: 1.2rem; bottom: 1.2rem; }
-            .stats-row { gap: 2.2rem 2.6rem; }
+            .hud-wa {
+                inset-inline-end: auto;
+                inset-inline-start: auto;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                bottom: 1.1rem;
+                background: rgba(9, 6, 2, 0.85);
+                border: 1px solid var(--hairline);
+                border-radius: 100px;
+                padding: 0.55rem 1.2rem;
+                white-space: nowrap;
+            }
+            .scroll-hint { display: none; }
+            .hero-name {
+                line-height: 1.45;
+                font-size: 2.75rem;
+                text-shadow: 0 2px 26px rgba(5, 3, 1, 0.95), 0 0 60px rgba(5, 3, 1, 0.7);
+            }
+            .hero-tagline, .hero-sub { text-shadow: 0 2px 14px rgba(5, 3, 1, 0.95), 0 0 34px rgba(5, 3, 1, 0.85); }
+            .hero-sub { font-size: 0.95rem; }
+            .manifesto-text { font-size: 1.35rem; line-height: 2.1; }
+            .stats-row { gap: 1.8rem 2.2rem; margin-top: 2.8rem; }
+            .stat-label { font-size: 0.8rem; max-width: 140px; }
+            .scene-tag { margin-bottom: 2rem; }
+            .section-title { margin-bottom: 2.4rem; }
+            .svc-row { padding: 1.8rem 0.2rem; }
+            .svc-desc { font-size: 0.92rem; }
+            .work-item { padding: 2.2rem 0.2rem; }
             .work-title { gap: 0.8rem; }
-            footer { padding-bottom: 6rem; }
+            .work-meta { gap: 0.8rem; }
+            .plan { padding: 2.2rem 1.4rem 2rem; }
+            .contact-actions { flex-direction: column; width: 100%; }
+            .btn-wa, .btn-call { width: 100%; max-width: 320px; }
+            .contact-number { margin-top: 2rem; }
+            .contact { padding-bottom: 16vh; }
+            .hero-tagline { font-size: 1.32rem; }
+            .hero-sub { padding: 0 0.4rem; }
+            .section-title { font-size: 1.72rem; line-height: 1.6; }
+            .manifesto-text { color: #f6ecd2; }
+            .work-title { font-size: 1.85rem; }
+        }
+
+        /* ============ MOBILE & SMALL SCREENS — a separate, painted desert (no 3D) ============ */
+        @media (max-width: 768px) {
+            #scene, .vignette { display: none; }
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                pointer-events: none;
+                background:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800' preserveAspectRatio='xMidYMax slice'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%23100a20'/%3E%3Cstop offset='.38' stop-color='%23361f0e'/%3E%3Cstop offset='.54' stop-color='%23874418'/%3E%3Cstop offset='.63' stop-color='%23d08a34'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23ffe2ac' stop-opacity='.95'/%3E%3Cstop offset='1' stop-color='%23ffbf70' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='800' fill='url(%23s)'/%3E%3Ccircle cx='318' cy='466' r='104' fill='url(%23g)'/%3E%3Ccircle cx='318' cy='466' r='20' fill='%23ffeac2'/%3E%3Cpath d='M0 528 Q100 492 190 526 T400 512 V800 H0Z' fill='%23996a2e'/%3E%3Cpath d='M0 604 Q120 552 230 598 T400 578 V800 H0Z' fill='%236b4318'/%3E%3Cpath d='M0 700 Q110 644 220 690 T400 665 V800 H0Z' fill='%233d2307'/%3E%3C/svg%3E") center bottom / cover no-repeat,
+                    #100a20;
+            }
+            body::after {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 1;
+                pointer-events: none;
+                background: linear-gradient(180deg, rgba(8, 5, 2, 0.4) 0%, transparent 22%, transparent 72%, rgba(6, 3, 1, 0.5) 100%);
+            }
+            .cursor-dot, .cursor-ring { display: none !important; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
-            .reveal, .hero .stage { transition: opacity 0.6s ease; transform: none; }
+            .reveal, .hero .stage {
+                transition: opacity 0.6s ease;
+                transform: none;
+                filter: none;
+            }
             .scroll-hint-line::after, .preloader-mark { animation: none; }
             .work-live::before { animation: none; opacity: 1; }
         }
@@ -742,7 +803,7 @@
         <div class="preloader-counter"><span id="preloaderNum">000</span></div>
     </div>
 
-    <!-- SAND SCENE -->
+    <!-- DESERT SCENE -->
     <canvas id="scene" aria-hidden="true"></canvas>
     <div class="vignette" aria-hidden="true"></div>
 
@@ -772,7 +833,7 @@
     <div class="cursor-ring" aria-hidden="true"></div>
 
     <main>
-        <!-- HERO -->
+        <!-- HERO — pure, empty desert. The journey has not begun. -->
         <section class="scene hero" id="hero">
             <div class="stage hero-eyebrow"><span class="mono" style="color: inherit;" data-lang-key="heroEyebrow">مطوّر مواقع المؤسسات — موريتانيا</span></div>
             <h1 class="stage display hero-name" data-lang-key="heroName">محمد عبد السلام</h1>
@@ -781,24 +842,24 @@
             <p class="stage hero-sub" data-lang-key="heroSub">أبني للمؤسسات مواقع كاملة ومتاجر إلكترونية بلوحات تحكم سهلة — حضور رقمي يليق بمؤسستك، ويبيع.</p>
         </section>
 
-        <!-- VISION -->
+        <!-- VISION — behind the first dune -->
         <section class="scene" id="vision">
-            <div class="scene-inner">
-                <div class="scene-tag reveal"><span class="mono" data-lang-key="sec1Tag">٠١ · الرؤية</span></div>
-                <p class="manifesto-text reveal" style="--d: 0.1s" data-lang-key="manifesto">
+            <div class="scene-inner panel reveal">
+                <div class="scene-tag"><span class="mono" data-lang-key="sec1Tag">٠١ · الرؤية</span></div>
+                <p class="manifesto-text" data-lang-key="manifesto">
                     كما حفظت <em>شنقيط</em> المعرفة في مخطوطاتها، أحفظ لمؤسستك مكانتها في العالم الرقمي —
                     مواقع ومتاجر تُبنى <em>بصبر الصحراء</em>، وتُصقل <em>بدقّة الذهب</em>، وتُصمَّم لتُحرّك الرغبة.
                 </p>
                 <div class="stats-row">
-                    <div class="reveal" style="--d: 0.15s">
+                    <div>
                         <span class="stat-num" data-lang-key="stat1Num">+٧</span>
                         <span class="stat-label" data-lang-key="stat1">سنوات في سيكولوجية الرغبة والمبيعات</span>
                     </div>
-                    <div class="reveal" style="--d: 0.3s">
+                    <div>
                         <span class="stat-num" data-lang-key="stat2Num">+٥</span>
                         <span class="stat-label" data-lang-key="stat2">سنوات في التسويق الرقمي</span>
                     </div>
-                    <div class="reveal" style="--d: 0.45s">
+                    <div>
                         <span class="stat-num" data-lang-key="stat3Num">+٢٠٠</span>
                         <span class="stat-label" data-lang-key="stat3">مشروع لمؤسسات وأعمال رائدة</span>
                     </div>
@@ -808,28 +869,28 @@
 
         <div class="ornament" aria-hidden="true">۞</div>
 
-        <!-- EXPERTISE -->
+        <!-- EXPERTISE — by the campfire -->
         <section class="scene" id="expertise">
-            <div class="scene-inner">
-                <div class="scene-tag reveal"><span class="mono" data-lang-key="sec2Tag">٠٢ · الخبرات</span></div>
-                <h2 class="display section-title reveal" style="--d: 0.1s" data-lang-key="servicesTitle">خبرات تتكامل لتُنتج نتائج</h2>
+            <div class="scene-inner panel reveal">
+                <div class="scene-tag"><span class="mono" data-lang-key="sec2Tag">٠٢ · الخبرات</span></div>
+                <h2 class="display section-title" data-lang-key="servicesTitle">خبرات تتكامل لتُنتج نتائج</h2>
                 <div class="svc-list">
-                    <div class="svc-row reveal">
+                    <div class="svc-row">
                         <span class="svc-num">I</span>
                         <h3 class="svc-title" data-lang-key="svc4Title">بناء مواقع المؤسسات</h3>
                         <p class="svc-desc" data-lang-key="svc4Desc">مواقع مؤسسية ومتاجر إلكترونية كاملة متعددة اللغات (عربي، فرنسي، إنجليزي)، بلوحة تحكم سهلة تُدير بها محتواك بنفسك دون خبرة تقنية — سريعة، آمنة، ومتقنة على الجوال والحاسوب، من الفكرة إلى الإطلاق.</p>
                     </div>
-                    <div class="svc-row reveal" style="--d: 0.1s">
+                    <div class="svc-row">
                         <span class="svc-num">II</span>
                         <h3 class="svc-title" data-lang-key="svc2Title">سيكولوجية الرغبة</h3>
                         <p class="svc-desc" data-lang-key="svc2Desc">7 سنوات من الدراسة والتطبيق في علم نفس الرغبة — أعرف متى يشتري العميل، ولماذا يتردد، وكيف أُقنعه دون أن يشعر أنه يُقاد. أطبّق مبادئ الندرة، الدليل الاجتماعي، والتحيّزات المعرفية بدقة.</p>
                     </div>
-                    <div class="svc-row reveal" style="--d: 0.2s">
+                    <div class="svc-row">
                         <span class="svc-num">III</span>
                         <h3 class="svc-title" data-lang-key="svc3Title">التسويق الرقمي الاستراتيجي</h3>
                         <p class="svc-desc" data-lang-key="svc3Desc">5 سنوات في خنادق التسويق الرقمي — من تحليل البيانات إلى تحسين الحملات. أربط بين الصفحة والسوق، فأضمن أن التصميم لا يُعجب فقط، بل يُحقّق أرقاماً.</p>
                     </div>
-                    <div class="svc-row reveal" style="--d: 0.3s">
+                    <div class="svc-row">
                         <span class="svc-num">IV</span>
                         <h3 class="svc-title" data-lang-key="svc1Title">تصميم صفحات الهبوط</h3>
                         <p class="svc-desc" data-lang-key="svc1Desc">تصاميم احترافية مبنية على فهم عميق لسلوك المستخدم، مع دعم كامل للغات متعددة (العربية، الإنجليزية، الفرنسية) وتجربة سلسة على جميع الأجهزة. كل بكسل في مكانه لخدمة هدف التحويل.</p>
@@ -840,19 +901,19 @@
 
         <div class="ornament" aria-hidden="true">۞</div>
 
-        <!-- WORKS -->
+        <!-- WORKS — at the mosque of Chinguetti -->
         <section class="scene" id="works">
-            <div class="scene-inner">
-                <div class="scene-tag reveal"><span class="mono" data-lang-key="sec3Tag">٠٣ · الأعمال</span></div>
-                <h2 class="display section-title reveal" style="--d: 0.1s" data-lang-key="worksTitle">مشاريع حيّة الآن</h2>
-                <a class="work-item reveal" href="index.html">
+            <div class="scene-inner panel reveal">
+                <div class="scene-tag"><span class="mono" data-lang-key="sec3Tag">٠٣ · الأعمال</span></div>
+                <h2 class="display section-title" data-lang-key="worksTitle">مشاريع حيّة الآن</h2>
+                <a class="work-item" href="index.html">
                     <h3 class="display work-title">Rim Medical <span class="work-arrow">↗</span></h3>
                     <div class="work-meta">
                         <span class="work-live" data-lang-key="workLive">يعمل الآن</span>
                         <span class="mono" data-lang-key="work1Meta">متجر ثلاثي اللغات بلوحة تحكم · المعدات الطبية</span>
                     </div>
                 </a>
-                <a class="work-item reveal" style="--d: 0.15s" href="sened.html">
+                <a class="work-item" href="sened.html">
                     <h3 class="display work-title"><span data-lang-key="work2Title">سند SENED</span> <span class="work-arrow">↗</span></h3>
                     <div class="work-meta">
                         <span class="work-live" data-lang-key="workLive">يعمل الآن</span>
@@ -864,14 +925,14 @@
 
         <div class="ornament" aria-hidden="true">۞</div>
 
-        <!-- PLANS -->
+        <!-- PLANS — at the kasbah gate -->
         <section class="scene" id="plans">
-            <div class="scene-inner">
-                <div class="scene-tag reveal"><span class="mono" data-lang-key="sec4Tag">٠٤ · الخطط</span></div>
-                <h2 class="display section-title reveal" style="--d: 0.1s" data-lang-key="plansTitle">اختر الخطة التي تناسب مؤسستك</h2>
-                <p class="plans-desc reveal" style="--d: 0.15s" data-lang-key="plansDesc">جميع الخطط قابلة للتخصيص حسب احتياجاتك. تواصل معي لمناقشة التفاصيل واستلام عرض سعر مخصص.</p>
+            <div class="scene-inner panel reveal">
+                <div class="scene-tag"><span class="mono" data-lang-key="sec4Tag">٠٤ · الخطط</span></div>
+                <h2 class="display section-title" data-lang-key="plansTitle">اختر الخطة التي تناسب مؤسستك</h2>
+                <p class="plans-desc" data-lang-key="plansDesc">جميع الخطط قابلة للتخصيص حسب احتياجاتك. تواصل معي لمناقشة التفاصيل واستلام عرض سعر مخصص.</p>
                 <div class="plans-grid">
-                    <div class="plan reveal" style="--d: 0.1s">
+                    <div class="plan">
                         <h3 class="plan-name" data-lang-key="plan1Name">الأساسية</h3>
                         <p class="plan-desc" data-lang-key="plan1Desc">للمؤسسات الناشئة التي تريد صفحة هبوط احترافية واحدة.</p>
                         <ul class="plan-features">
@@ -884,7 +945,7 @@
                         </ul>
                         <a href="https://wa.me/22224555506?text=مرحباً، أريد الاستفسار عن الخطة الأساسية" target="_blank" rel="noopener noreferrer" class="plan-cta" data-lang-key="planCta">استفسر عن الخطة</a>
                     </div>
-                    <div class="plan featured reveal" style="--d: 0.2s">
+                    <div class="plan featured">
                         <span class="plan-badge" data-lang-key="planBadge">الأكثر طلباً</span>
                         <h3 class="plan-name" data-lang-key="plan2Name">المتكاملة</h3>
                         <p class="plan-desc" data-lang-key="plan2Desc">للمؤسسات المتوسطة الباحثة عن حل تسويقي متكامل مع سيكولوجية المبيعات.</p>
@@ -899,7 +960,7 @@
                         </ul>
                         <a href="https://wa.me/22224555506?text=مرحباً، أريد الاستفسار عن الخطة المتكاملة" target="_blank" rel="noopener noreferrer" class="plan-cta" data-lang-key="planCta">استفسر عن الخطة</a>
                     </div>
-                    <div class="plan reveal" style="--d: 0.3s">
+                    <div class="plan">
                         <h3 class="plan-name" data-lang-key="plan3Name">المؤسسية</h3>
                         <p class="plan-desc" data-lang-key="plan3Desc">للمؤسسات الكبيرة والمشاريع المعقدة التي تحتاج حلاً شاملاً ومخصصاً بالكامل.</p>
                         <ul class="plan-features">
@@ -919,7 +980,7 @@
 
         <div class="ornament" aria-hidden="true">۞</div>
 
-        <!-- CONTACT -->
+        <!-- CONTACT — dawn -->
         <section class="scene contact" id="contact">
             <div class="scene-inner">
                 <div class="scene-tag reveal"><span class="mono" data-lang-key="sec5Tag">٠٥ · التواصل</span></div>
@@ -938,15 +999,6 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="footer-id">
-            <span class="display" data-lang-key="footerName">محمد عبد السلام</span>
-            <span class="mono" data-lang-key="footerTagline">سيكولوجية الرغبة تُقابل التسويق الرقمي</span>
-        </div>
-        <span class="footer-made" data-lang-key="footerMade">صُمِّم وبُني في نواكشوط — موريتانيا ۞</span>
-        <a class="footer-back" href="index.html" data-lang-key="footerBack">Rim Medical — الموقع الرئيسي</a>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
     <script>
@@ -1019,10 +1071,6 @@
                     contactDesc: 'أفضل طريقة للبدء هي محادثة مباشرة. أخبرني عن مشروعك، وسأقدّم لك رؤية واضحة قبل أن تدفع أي شيء.',
                     ctaWa: 'واتساب مباشر',
                     ctaCall: 'اتصال هاتفي',
-                    footerName: 'محمد عبد السلام',
-                    footerTagline: 'سيكولوجية الرغبة تُقابل التسويق الرقمي',
-                    footerMade: 'صُمِّم وبُني في نواكشوط — موريتانيا ۞',
-                    footerBack: 'Rim Medical — الموقع الرئيسي',
                 },
                 en: {
                     hudRole: 'Institutional Web Developer',
@@ -1088,10 +1136,6 @@
                     contactDesc: 'The best way to begin is a direct chat. Tell me about your project, and I\'ll give you a clear vision before you commit to anything.',
                     ctaWa: 'WhatsApp Direct',
                     ctaCall: 'Phone Call',
-                    footerName: 'Mohamed Abdelsalam',
-                    footerTagline: 'Psychology of Desire Meets Digital Marketing',
-                    footerMade: 'Designed & built in Nouakchott — Mauritania ۞',
-                    footerBack: 'Rim Medical — Main Site',
                 },
                 fr: {
                     hudRole: 'Développeur Web Institutionnel',
@@ -1157,10 +1201,6 @@
                     contactDesc: 'La meilleure façon de commencer est un échange direct. Parlez-moi de votre projet, et je vous donnerai une vision claire avant tout engagement.',
                     ctaWa: 'WhatsApp Direct',
                     ctaCall: 'Appel Téléphonique',
-                    footerName: 'Mohamed Abdelsalam',
-                    footerTagline: 'La Psychologie du Désir Rencontre le Marketing Digital',
-                    footerMade: 'Conçu et développé à Nouakchott — Mauritanie ۞',
-                    footerBack: 'Rim Medical — Site Principal',
                 }
             };
 
@@ -1194,23 +1234,21 @@
             const preNum = document.getElementById('preloaderNum');
             const preBar = document.getElementById('preloaderBar');
             const preStart = performance.now();
-            const preDuration = 1700;
+            const preDuration = window.matchMedia('(max-width: 768px)').matches ? 900 : 1700;
 
             function preTick(now) {
                 const raw = Math.min(1, (now - preStart) / preDuration);
                 const eased = 1 - Math.pow(1 - raw, 3);
-                const val = Math.floor(eased * 100);
-                preNum.textContent = String(val).padStart(3, '0');
+                preNum.textContent = String(Math.floor(eased * 100)).padStart(3, '0');
                 preBar.style.width = (eased * 100) + '%';
-                if (raw < 1) {
-                    requestAnimationFrame(preTick);
-                } else {
-                    document.body.classList.add('loaded');
-                }
+                if (raw < 1) requestAnimationFrame(preTick);
+                else document.body.classList.add('loaded');
             }
             requestAnimationFrame(preTick);
+            /* safety: never trap the visitor behind the preloader */
+            setTimeout(function () { document.body.classList.add('loaded'); }, preDuration + 800);
 
-            /* ==================== DESERT JOURNEY — 3D ==================== */
+            /* ==================== SCROLL STATE ==================== */
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
@@ -1223,30 +1261,55 @@
             window.addEventListener('scroll', updateScroll, { passive: true });
             updateScroll();
 
-            try { initDesert(); } catch (e) { console.warn('3D scene unavailable:', e); }
+            /* start the 3D desert only on wide screens; if the window grows past
+               the breakpoint later, start it then — phones keep the painted desert */
+            let desertStarted = false;
+            function maybeStartDesert() {
+                if (desertStarted || window.matchMedia('(max-width: 768px)').matches) return;
+                desertStarted = true;
+                try { initDesert(); } catch (e) { console.warn('3D scene unavailable:', e); }
+            }
+            maybeStartDesert();
+            window.addEventListener('resize', maybeStartDesert);
 
+            /* ==================== DESERT JOURNEY — 3D ==================== */
             function initDesert() {
                 if (!window.THREE) return;
                 const T = window.THREE;
                 const canvas = document.getElementById('scene');
 
-                const renderer = new T.WebGLRenderer({ canvas: canvas, antialias: !isMobile });
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75));
+                const renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
                 renderer.outputEncoding = T.sRGBEncoding;
 
                 const scene = new T.Scene();
-                scene.background = new T.Color(0x070502);
-                scene.fog = new T.FogExp2(0x0a0603, 0.0040);
+                /* golden-hour sky: deep indigo overhead melting into an amber horizon */
+                (function () {
+                    const c = document.createElement('canvas');
+                    c.width = 16; c.height = 512;
+                    const g = c.getContext('2d');
+                    const grad = g.createLinearGradient(0, 0, 0, 512);
+                    grad.addColorStop(0, '#0e0a20');
+                    grad.addColorStop(0.4, '#33200f');
+                    grad.addColorStop(0.56, '#7e4218');
+                    grad.addColorStop(0.66, '#cd8630');
+                    grad.addColorStop(0.76, '#8a5a26');
+                    grad.addColorStop(1, '#5c3c16');
+                    g.fillStyle = grad;
+                    g.fillRect(0, 0, 16, 512);
+                    scene.background = new T.CanvasTexture(c);
+                })();
+                scene.fog = new T.FogExp2(0x99601f, 0.00225);
 
                 const camera = new T.PerspectiveCamera(58, 1, 0.1, 2500);
 
-                /* ---- lights ---- */
-                scene.add(new T.HemisphereLight(0x241b10, 0x070502, 0.3));
-                const moonLight = new T.DirectionalLight(0xffd9a0, 0.75);
-                moonLight.position.set(260, 70, -520);
-                scene.add(moonLight);
+                /* ---- lights: low sun from the side so crests carry light and hollows hold shadow ---- */
+                scene.add(new T.HemisphereLight(0x7a648a, 0x3a220c, 0.45));
+                const sunLight = new T.DirectionalLight(0xffbe74, 1.55);
+                sunLight.position.set(420, 130, -380);
+                scene.add(sunLight);
 
-                /* ---- noise (value noise + dune ridges) ---- */
+                /* ---- noise ---- */
                 const perm = new Uint8Array(512);
                 (function () {
                     let s = 1337;
@@ -1267,48 +1330,111 @@
                     return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
                 }
                 function ridge(n) { return 1 - Math.abs(2 * n - 1); }
+
+                /* real dunes: long wind-carved ridges crossing the path — sharp crests, soft flanks */
                 function dune(x, z) {
-                    let h = ridge(noise2(x * 0.0055, z * 0.0035)) * 20;
-                    h += ridge(noise2(x * 0.014 + 7.3, z * 0.011)) * 7;
-                    h += noise2(x * 0.05, z * 0.05) * 1.3;
+                    let h = Math.pow(ridge(noise2(x * 0.0019 + z * 0.0007, z * 0.0041)), 2.1) * 27;
+                    h += Math.pow(ridge(noise2(x * 0.006 + 3.7, z * 0.0052)), 1.7) * 3.6;
+                    h += Math.pow(ridge(noise2(x * 0.018, z * 0.015 + 9.1)), 1.5) * 1.1;
+                    h += noise2(x * 0.05, z * 0.05) * 0.5;
                     return h;
                 }
 
-                /* ---- dune terrain ---- */
-                const segX = isMobile ? 90 : 150, segZ = isMobile ? 130 : 210;
+                /* ---- dune terrain: smooth-shaded, vertex-tinted, sand-grain bump ---- */
+                const segX = 260, segZ = 380;
                 const terrainGeo = new T.PlaneGeometry(950, 1500, segX, segZ);
                 terrainGeo.rotateX(-Math.PI / 2);
                 terrainGeo.translate(0, 0, -600);
                 const tPos = terrainGeo.attributes.position;
+                const tColors = new Float32Array(tPos.count * 3);
                 for (let i = 0; i < tPos.count; i++) {
-                    tPos.setY(i, dune(tPos.getX(i), tPos.getZ(i)));
+                    const h = dune(tPos.getX(i), tPos.getZ(i));
+                    tPos.setY(i, h);
+                    // hollows hold deep amber, crests warm toward gold
+                    const f = Math.min(1, h / 30);
+                    tColors[i * 3] = 0.55 + f * 0.40;
+                    tColors[i * 3 + 1] = 0.36 + f * 0.33;
+                    tColors[i * 3 + 2] = 0.17 + f * 0.21;
                 }
+                terrainGeo.setAttribute('color', new T.BufferAttribute(tColors, 3));
                 terrainGeo.computeVertexNormals();
+
+                function sandBumpTexture() {
+                    const c = document.createElement('canvas');
+                    c.width = c.height = 256;
+                    const g = c.getContext('2d');
+                    g.fillStyle = '#808080';
+                    g.fillRect(0, 0, 256, 256);
+                    // fine grain
+                    for (let i = 0; i < 9000; i++) {
+                        const v = 110 + Math.random() * 70;
+                        g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')';
+                        g.fillRect(Math.random() * 256, Math.random() * 256, 1.4, 1.4);
+                    }
+                    // wind ripples
+                    g.globalAlpha = 0.18;
+                    for (let r = 0; r < 26; r++) {
+                        const y0 = Math.random() * 256;
+                        g.strokeStyle = Math.random() > 0.5 ? '#9a9a9a' : '#5f5f5f';
+                        g.lineWidth = 1.5 + Math.random() * 2;
+                        g.beginPath();
+                        for (let x = 0; x <= 256; x += 16) {
+                            const y = y0 + Math.sin(x * 0.05 + r) * 6;
+                            if (x === 0) g.moveTo(x, y); else g.lineTo(x, y);
+                        }
+                        g.stroke();
+                    }
+                    g.globalAlpha = 1;
+                    const tex = new T.CanvasTexture(c);
+                    tex.wrapS = tex.wrapT = T.RepeatWrapping;
+                    tex.repeat.set(130, 200);
+                    return tex;
+                }
+
                 const terrain = new T.Mesh(terrainGeo, new T.MeshStandardMaterial({
-                    color: 0x6a4b1e, roughness: 1, metalness: 0, flatShading: true
+                    color: 0xffffff,
+                    vertexColors: true,
+                    roughness: 0.92,
+                    metalness: 0,
+                    bumpMap: sandBumpTexture(),
+                    bumpScale: 0.09
                 }));
                 scene.add(terrain);
 
+                /* ---- soft round dot for points (stars & drifting sand) ---- */
+                function dotTexture() {
+                    const c = document.createElement('canvas');
+                    c.width = c.height = 32;
+                    const g = c.getContext('2d');
+                    const grad = g.createRadialGradient(16, 16, 1, 16, 16, 15);
+                    grad.addColorStop(0, 'rgba(255,255,255,1)');
+                    grad.addColorStop(0.5, 'rgba(255,255,255,0.5)');
+                    grad.addColorStop(1, 'rgba(255,255,255,0)');
+                    g.fillStyle = grad;
+                    g.fillRect(0, 0, 32, 32);
+                    return new T.CanvasTexture(c);
+                }
+                const dotMap = dotTexture();
+
                 /* ---- stars ---- */
                 const starGeo = new T.BufferGeometry();
-                const starN = isMobile ? 500 : 1100;
+                const starN = 700;
                 const starPos = new Float32Array(starN * 3);
                 for (let i = 0; i < starN; i++) {
                     const th = Math.random() * Math.PI * 2;
-                    const ph = Math.acos(1 - Math.random() * 0.85);
+                    const ph = Math.acos(1 - Math.random() * 0.45);
                     const r = 1100;
                     starPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
                     starPos[i * 3 + 1] = Math.abs(r * Math.cos(ph)) + 15;
                     starPos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th) - 600;
                 }
                 starGeo.setAttribute('position', new T.BufferAttribute(starPos, 3));
-                const stars = new T.Points(starGeo, new T.PointsMaterial({
-                    color: 0xead9b0, size: 1.7, sizeAttenuation: false,
-                    transparent: true, opacity: 0.75, depthWrite: false
-                }));
-                scene.add(stars);
+                scene.add(new T.Points(starGeo, new T.PointsMaterial({
+                    color: 0xead9b0, size: 2.4, sizeAttenuation: false, map: dotMap,
+                    transparent: true, opacity: 0.5, depthWrite: false
+                })));
 
-                /* ---- glow sprite helper ---- */
+                /* ---- glow helper ---- */
                 function glowTexture(inner, outer) {
                     const c = document.createElement('canvas');
                     c.width = c.height = 256;
@@ -1322,26 +1448,25 @@
                     return new T.CanvasTexture(c);
                 }
 
-                /* ---- the moon ---- */
-                const moon = new T.Sprite(new T.SpriteMaterial({
-                    map: glowTexture('rgba(255,244,214,1)', 'rgba(232,191,106,0.35)'),
+                /* ---- low sun + horizon glow ---- */
+                const sun = new T.Sprite(new T.SpriteMaterial({
+                    map: glowTexture('rgba(255,232,178,1)', 'rgba(238,150,58,0.4)'),
                     blending: T.AdditiveBlending, depthWrite: false, transparent: true, fog: false
                 }));
-                moon.position.set(0, 110, -1000);
-                moon.scale.set(200, 200, 1);
-                scene.add(moon);
+                sun.position.set(180, 78, -1000);
+                sun.scale.set(300, 300, 1);
+                scene.add(sun);
 
-                /* ---- dawn glow on the far horizon (grows near journey's end) ---- */
-                const dawn = new T.Sprite(new T.SpriteMaterial({
-                    map: glowTexture('rgba(232,170,80,0.9)', 'rgba(160,90,30,0.25)'),
-                    blending: T.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0, fog: false
+                const haze = new T.Sprite(new T.SpriteMaterial({
+                    map: glowTexture('rgba(240,170,74,0.9)', 'rgba(170,95,30,0.28)'),
+                    blending: T.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.5, fog: false
                 }));
-                dawn.position.set(0, 5, -1100);
-                dawn.scale.set(900, 260, 1);
-                scene.add(dawn);
+                haze.position.set(60, 12, -1100);
+                haze.scale.set(1500, 340, 1);
+                scene.add(haze);
 
                 /* ---- drifting sand ---- */
-                const sandN = isMobile ? 220 : 420;
+                const sandN = 380;
                 const sandGeo = new T.BufferGeometry();
                 const sandPos = new Float32Array(sandN * 3);
                 const sandVel = new Float32Array(sandN);
@@ -1353,19 +1478,19 @@
                 }
                 for (let i = 0; i < sandN; i++) sandSpawn(i, 0, 18, 0);
                 sandGeo.setAttribute('position', new T.BufferAttribute(sandPos, 3));
-                const sand = new T.Points(sandGeo, new T.PointsMaterial({
-                    color: 0xd9b36a, size: 0.3, sizeAttenuation: true,
-                    transparent: true, opacity: 0.38, depthWrite: false, blending: T.AdditiveBlending
-                }));
-                scene.add(sand);
+                scene.add(new T.Points(sandGeo, new T.PointsMaterial({
+                    color: 0xd9b36a, size: 0.26, sizeAttenuation: true, map: dotMap,
+                    transparent: true, opacity: 0.28, depthWrite: false, blending: T.AdditiveBlending
+                })));
 
-                /* ---- landmarks ---- */
-                const mud = new T.MeshStandardMaterial({ color: 0x6e4d28, roughness: 1, flatShading: true });
-                const cloth = new T.MeshStandardMaterial({ color: 0x4a3419, roughness: 1, flatShading: true });
-                const palmGreen = new T.MeshStandardMaterial({ color: 0x24301c, roughness: 1, flatShading: true, side: T.DoubleSide });
-                const trunkMat = new T.MeshStandardMaterial({ color: 0x4c331f, roughness: 1, flatShading: true });
+                /* ---- materials for landmarks ---- */
+                const mud = new T.MeshStandardMaterial({ color: 0x9a6a34, roughness: 1, flatShading: true });
+                const stone = new T.MeshStandardMaterial({ color: 0x8a6540, roughness: 1, flatShading: true });
+                const cloth = new T.MeshStandardMaterial({ color: 0x6b4a24, roughness: 1, flatShading: true });
+                const palmGreen = new T.MeshStandardMaterial({ color: 0x2f4423, roughness: 1, flatShading: true, side: T.DoubleSide });
+                const trunkMat = new T.MeshStandardMaterial({ color: 0x5e4025, roughness: 1, flatShading: true });
 
-                /* tents + campfire (٠٢) */
+                /* ٠٢ — tents + campfire */
                 const tents = new T.Group();
                 [[0, 0, 0, 4.2, 3.2], [7, 0, 4, 3.2, 2.6], [-6, 0, 3, 3.6, 2.8]].forEach(td => {
                     const tent = new T.Mesh(new T.ConeGeometry(td[3], td[4], 4), cloth);
@@ -1383,42 +1508,26 @@
                 fireGlow.position.copy(fire.position);
                 fireGlow.scale.set(6, 6, 1);
                 tents.add(fireGlow);
+                tents.scale.setScalar(1.45);
                 tents.position.set(26, 0, -168);
                 scene.add(tents);
 
-                /* camel caravan silhouettes (٠٣) */
+                /* camel caravan on a far ridge */
                 function camelTexture() {
                     const c = document.createElement('canvas');
                     c.width = 128; c.height = 96;
                     const g = c.getContext('2d');
                     g.fillStyle = '#050302';
                     g.strokeStyle = '#050302';
-                    // legs
                     g.fillRect(46, 58, 4, 34); g.fillRect(56, 60, 4, 32);
                     g.fillRect(74, 60, 4, 32); g.fillRect(84, 58, 4, 34);
-                    // body
-                    g.beginPath();
-                    g.ellipse(66, 54, 28, 12, 0, 0, Math.PI * 2);
-                    g.fill();
-                    // hump
-                    g.beginPath();
-                    g.arc(64, 46, 11, Math.PI, 0);
-                    g.fill();
-                    // neck + head
+                    g.beginPath(); g.ellipse(66, 54, 28, 12, 0, 0, Math.PI * 2); g.fill();
+                    g.beginPath(); g.arc(64, 46, 11, Math.PI, 0); g.fill();
                     g.lineWidth = 7; g.lineCap = 'round';
-                    g.beginPath();
-                    g.moveTo(90, 52);
-                    g.quadraticCurveTo(101, 42, 102, 28);
-                    g.stroke();
-                    g.beginPath();
-                    g.ellipse(105, 25, 8, 4.5, -0.25, 0, Math.PI * 2);
-                    g.fill();
-                    // tail
+                    g.beginPath(); g.moveTo(90, 52); g.quadraticCurveTo(101, 42, 102, 28); g.stroke();
+                    g.beginPath(); g.ellipse(105, 25, 8, 4.5, -0.25, 0, Math.PI * 2); g.fill();
                     g.lineWidth = 3;
-                    g.beginPath();
-                    g.moveTo(40, 50);
-                    g.quadraticCurveTo(34, 56, 35, 64);
-                    g.stroke();
+                    g.beginPath(); g.moveTo(40, 50); g.quadraticCurveTo(34, 56, 35, 64); g.stroke();
                     return new T.CanvasTexture(c);
                 }
                 const camelMap = camelTexture();
@@ -1433,34 +1542,83 @@
                     scene.add(cm);
                 }
 
-                /* oasis palms (٠٣) */
-                const oasis = new T.Group();
+                /* ٠٣ — mosque of Chinguetti + stone village + oasis */
+                const mosque = new T.Group();
+                // square tapering minaret — the icon of Chinguetti
+                const minaret = new T.Mesh(new T.CylinderGeometry(1.9, 3.1, 17, 4), stone);
+                minaret.rotation.y = Math.PI / 4;
+                minaret.position.y = 8.5;
+                mosque.add(minaret);
+                // crown platform
+                const crown = new T.Mesh(new T.BoxGeometry(4.6, 1.1, 4.6), stone);
+                crown.position.y = 17.3;
+                mosque.add(crown);
+                // five finials (ostrich-egg posts): four corners + center
+                [[-1.7, -1.7], [1.7, -1.7], [-1.7, 1.7], [1.7, 1.7], [0, 0]].forEach((p, i) => {
+                    const post = new T.Mesh(new T.CylinderGeometry(0.14, 0.2, i === 4 ? 2.2 : 1.4, 4), stone);
+                    post.position.set(p[0], 17.9 + (i === 4 ? 0.55 : 0.15), p[1]);
+                    mosque.add(post);
+                    const egg = new T.Mesh(new T.SphereGeometry(0.34, 8, 6), new T.MeshStandardMaterial({
+                        color: 0xd8c9a4, roughness: 0.7, flatShading: true
+                    }));
+                    egg.position.set(p[0], 18.75 + (i === 4 ? 1 : 0.15), p[1]);
+                    mosque.add(egg);
+                });
+                // prayer hall
+                const hall = new T.Mesh(new T.BoxGeometry(15, 4.6, 11), stone);
+                hall.position.set(-8.5, 2.3, 2);
+                mosque.add(hall);
+                const door = new T.Mesh(new T.BoxGeometry(1.8, 2.8, 0.5), new T.MeshStandardMaterial({
+                    color: 0x1c1208, roughness: 1
+                }));
+                door.position.set(-5, 1.4, 7.6);
+                mosque.add(door);
+                // stone village houses scattered behind
+                for (let i = 0; i < 8; i++) {
+                    const w = 3 + Math.random() * 3;
+                    const hH = 2.2 + Math.random() * 1.6;
+                    const house = new T.Mesh(new T.BoxGeometry(w, hH, 2.5 + Math.random() * 2.5), stone);
+                    const hx = -22 + Math.random() * 34, hz = -14 - Math.random() * 14;
+                    house.position.set(hx, hH / 2 - 0.3, hz);
+                    house.rotation.y = (Math.random() - 0.5) * 0.6;
+                    mosque.add(house);
+                }
+                const mosqueLight = new T.PointLight(0xffb45c, 1.6, 44, 2);
+                mosqueLight.position.set(-2, 5, 8);
+                mosque.add(mosqueLight);
+                const mx = -34, mz = -302;
+                mosque.scale.setScalar(1.5);
+                mosque.position.set(mx, dune(mx, mz) - 0.5, mz);
+                mosque.rotation.y = 0.35;
+                scene.add(mosque);
+
+                /* oasis palms by the mosque */
                 function palm(px, pz, h) {
                     const p = new T.Group();
                     const trunk = new T.Mesh(new T.CylinderGeometry(0.16, 0.4, h, 5), trunkMat);
                     trunk.position.y = h / 2;
                     trunk.rotation.z = (Math.random() - 0.5) * 0.3;
                     p.add(trunk);
-                    const crownY = h - 0.2 + trunk.rotation.z * -h * 0.4;
                     for (let i = 0; i < 7; i++) {
                         const frond = new T.Mesh(new T.ConeGeometry(0.5, 4.2, 3, 1, true), palmGreen);
                         frond.scale.z = 0.22;
                         const ang = (i / 7) * Math.PI * 2;
-                        frond.position.set(Math.cos(ang) * 1.5, crownY + 0.4, Math.sin(ang) * 1.5);
+                        frond.position.set(Math.cos(ang) * 1.5, h + 0.2, Math.sin(ang) * 1.5);
                         frond.rotation.set(Math.sin(ang) * 1.15, 0, -Math.cos(ang) * 1.15);
                         p.add(frond);
                     }
                     p.position.set(px, 0, pz);
                     return p;
                 }
-                const ox = -26, oz = -305;
-                [[0, 0, 9], [4, 3, 7.5], [-4, 2, 8], [2, -4, 6.5], [-3, -3, 10], [7, -1, 7]].forEach(pd => {
+                const oasis = new T.Group();
+                [[14, 10, 9], [18, 13, 7.5], [11, 14, 8], [21, 9, 6.5], [16, 6, 10]].forEach(pd => {
                     oasis.add(palm(pd[0], pd[1], pd[2]));
                 });
-                oasis.position.set(ox, dune(ox, oz) - 0.4, oz);
+                oasis.scale.setScalar(1.4);
+                oasis.position.set(mx, dune(mx, mz) - 0.4, mz);
                 scene.add(oasis);
 
-                /* kasbah gate + minaret (٠٤) */
+                /* ٠٤ — kasbah gate */
                 const kasbah = new T.Group();
                 const tw1 = new T.Mesh(new T.CylinderGeometry(1.7, 2.5, 15, 4), mud);
                 tw1.position.set(-6, 7.5, 0);
@@ -1470,15 +1628,16 @@
                 wall.position.y = 3.75;
                 const lintel = new T.Mesh(new T.BoxGeometry(6, 2.2, 2.1), mud);
                 lintel.position.y = 8.4;
-                const minaret = new T.Mesh(new T.CylinderGeometry(0.95, 1.5, 19, 4), mud);
-                minaret.position.set(11.5, 9.5, -3);
-                const minTop = new T.Mesh(new T.ConeGeometry(1.5, 2.6, 4), mud);
-                minTop.position.set(11.5, 20.3, -3);
-                kasbah.add(tw1, tw2, wall, lintel, minaret, minTop);
+                const ktower = new T.Mesh(new T.CylinderGeometry(0.95, 1.5, 19, 4), mud);
+                ktower.position.set(11.5, 9.5, -3);
+                const ktop = new T.Mesh(new T.ConeGeometry(1.5, 2.6, 4), mud);
+                ktop.position.set(11.5, 20.3, -3);
+                kasbah.add(tw1, tw2, wall, lintel, ktower, ktop);
                 const gateLight = new T.PointLight(0xffb45c, 1.8, 38, 2);
                 gateLight.position.set(0, 4, 4);
                 kasbah.add(gateLight);
                 const kx = -4, kz = -428;
+                kasbah.scale.setScalar(1.5);
                 kasbah.position.set(kx, dune(kx, kz) - 0.5, kz);
                 kasbah.rotation.y = 0.25;
                 scene.add(kasbah);
@@ -1486,22 +1645,22 @@
                 /* ---- camera journey ---- */
                 const pathPos = new T.CatmullRomCurve3([
                     new T.Vector3(0, 52, 78),
-                    new T.Vector3(14, 24, -30),
-                    new T.Vector3(-10, 19, -120),
-                    new T.Vector3(8, 17, -220),
-                    new T.Vector3(-10, 19, -335),
-                    new T.Vector3(-2, 30, -440)
+                    new T.Vector3(14, 32, -30),
+                    new T.Vector3(-10, 28, -120),
+                    new T.Vector3(8, 26, -225),
+                    new T.Vector3(-10, 28, -335),
+                    new T.Vector3(-2, 38, -440)
                 ]);
                 const pathLook = new T.CatmullRomCurve3([
                     new T.Vector3(0, 95, -700),
-                    new T.Vector3(-4, 14, -150),
-                    new T.Vector3(22, 10, -205),
-                    new T.Vector3(-26, 11, -320),
-                    new T.Vector3(-6, 14, -435),
+                    new T.Vector3(-4, 18, -150),
+                    new T.Vector3(26, 14, -200),
+                    new T.Vector3(-34, 16, -305),
+                    new T.Vector3(-6, 18, -435),
                     new T.Vector3(0, 100, -1000)
                 ]);
 
-                let mouseX = 0, mouseY = 0, mx = 0, my = 0;
+                let mouseX = 0, mouseY = 0, mx2 = 0, my2 = 0;
                 if (!isMobile) {
                     window.addEventListener('mousemove', (e) => {
                         mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -1529,33 +1688,29 @@
                     pathPos.getPoint(t, camPos);
                     pathLook.getPoint(t, lookPos);
 
-                    // keep camera above the dunes
-                    const ground = dune(camPos.x, camPos.z) + 5;
+                    const ground = dune(camPos.x, camPos.z) + 8;
                     if (camPos.y < ground) camPos.y = ground;
+                    /* keep the gaze on the horizon side of the nearest crest */
+                    const lookGround = dune(lookPos.x, lookPos.z) + 9;
+                    if (lookPos.y < lookGround) lookPos.y = lookGround;
 
-                    // mouse drift + idle breath
-                    mx += (mouseX - mx) * 0.04;
-                    my += (mouseY - my) * 0.04;
-                    camPos.x += mx * 3;
-                    camPos.y += -my * 2 + (reduceMotion ? 0 : Math.sin(time * 0.5) * 0.5);
-                    lookPos.x += mx * 6;
-                    lookPos.y += -my * 4;
+                    mx2 += (mouseX - mx2) * 0.04;
+                    my2 += (mouseY - my2) * 0.04;
+                    camPos.x += mx2 * 3;
+                    camPos.y += -my2 * 2 + (reduceMotion ? 0 : Math.sin(time * 0.5) * 0.5);
+                    lookPos.x += mx2 * 6;
+                    lookPos.y += -my2 * 4;
 
                     camera.position.copy(camPos);
                     camera.lookAt(lookPos);
 
-                    // dawn rises at the journey's end
-                    dawn.material.opacity = Math.max(0, (t - 0.72) / 0.28) * 0.65;
-                    moon.material.opacity = 1 - Math.max(0, (t - 0.8) / 0.2) * 0.35;
+                    haze.material.opacity = 0.5 + t * 0.3;
+                    sun.position.x = 180 - t * 120;
 
-                    // flicker the campfire
                     if (!reduceMotion) {
                         fire.intensity = 2.0 + Math.sin(time * 9) * 0.35 + Math.sin(time * 23) * 0.2;
                         fireGlow.material.opacity = 0.75 + Math.sin(time * 9) * 0.12;
-                    }
 
-                    // drifting sand follows the camera
-                    if (!reduceMotion) {
                         for (let i = 0; i < sandN; i++) {
                             sandPos[i * 3] += sandVel[i];
                             sandPos[i * 3 + 1] += Math.sin(time + i) * 0.004;
@@ -1572,7 +1727,7 @@
                 requestAnimationFrame(frame);
             }
 
-            /* ==================== REVEALS ==================== */
+            /* ==================== EMERGE REVEALS ==================== */
             const io = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1580,7 +1735,7 @@
                         io.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+            }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
             document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
             /* ==================== CURSOR ==================== */
